@@ -1,0 +1,110 @@
+\documentclass[12pt]{article}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{scribe}
+\usepackage{listings}
+\usepackage{natbib,verbatim}
+%\Scribe{Your Name}
+\Lecturer{Prof. Nisha Chandramoorthy (she/her)}
+\LectureNumber{Lecture 0}
+\LectureDate{22nd August 2023}
+\LectureTitle{Course Outline}
+
+\lstset{style=mystyle}
+
+\begin{document}
+	\MakeScribeTop
+
+In this course, we learn the mathematical foundations of modern machine learning methods with the goal of understanding how and when they do work and do not. We will learn about neural networks, but we will spend several lectures on classical statistical models and algorithms.
+\section{General information}
+\begin{itemize}
+	\item Class time and location:
+	\item Office hours:
+	\item Instructor email: nishac@gatech.edu
+	\item TAs name and email: 
+	\item Prerequisites: 
+\end{itemize}
+\section{Resources (not exhaustive)}
+
+\begin{itemize}
+	\item The textbook for the course will be \citep{shalev}. Other books we will cover material from are \citep{mohri}, \citep{murphy1} and \citep{murphy2}. These are available online. Some lectures will be based on research articles, and these will be cited during class and in the corresponding lecture notes. 
+\end{itemize}
+As modern ML methods grow, so do the mathematical and computational questions around them. Hence, it is important to remember that this course is only a limited view at a vast landscape. Apart from similar courses offered across Georgia Tech, there are other freely available course materials that will certainly enhance this view.
+Here are a few: \citep{philippe}, \citep{stanford}.
+\section{Tentative course schedule}
+\subsection*{Part 1 - Learning: Foundations, models, algorithms}
+\begin{itemize}
+	\item[Lec 1] Least-squares regression, Tikhonov regularization
+	\item[Lec 2] Logistic regression, perceptron algorithm, Empirical risk minimization
+	\item[Lec 3] Halfspaces and linear programming
+	\item[Lec ] Empirical risk minimization, neural network models
+	\item[Lec 3] Boosting algorithm
+	\item[Lec ] Computational complexity of learning
+	\item[Lec ] Generalization
+	\item[Lec ] Kernel methods, kernel trick
+	\item[Lec ] Clustering, k-means, spectral clustering
+	\item[Lec ] Gaussian mixture models, Expectation Maximization algorithm
+	\item{Lec ] Support Vector Machines, separating hyperplanes
+	\item[Lec ] Nearest neighbor classifier 
+	\item[Lec ] Decision trees, ranking
+	\item[Lec ] Multi-class classification
+	\item[Lec ] Learning dynamical systems from timeseries data: Kalman filters
+	\item[Lec ] Data-driven operator learning
+\end{itemize}
+\subsection*{Part 2: Statistics and optimization}
+\begin{itemize}
+	\item[Lec ] Kernel density estimation
+	\item[Lec ] Probability measure distances, divergences
+	\item[Lec ] Model selection and cross-validation
+	\item[Lec ] Bayesian information criterion
+	\item[Lec ] Gradient and stochastic gradient descent
+	\item[Lec ] Regularization, overfitting
+	\item[Lec ] Reinforcement learning, stochastic optimal control
+	\item[Lec ] Generative models, Maximum Likelihood estimation, N\"aive Bayes
+	\item[Lec ] Bias-complexity tradeoff, generalization bounds, algorithmic stability
+\end{itemize}
+
+\subsection*{Part 3: Other learning models and modalities}
+\begin{itemize}
+	\item[Lec n] Generative models: Score-based generative models/diffusion models.
+	\item[Lec n+1] Variational Autoencoders, Generative adversarial neural networks
+	\item[Lec n+2] Optimal transport, mean-field games, stochastic optimal control revisited
+	\item[Lec ] Recurrent, convolutional networks, feedforward, 
+	\item[Lec ] Graph learning, graphical models
+\end{itemize}
+
+\section{Grading information and late policy}
+
+The final grade is determined by:
+\begin{itemize}
+	\item Final project: 40\%
+	\item Homework: 30\%
+	\item Midterm I and II: 30\%
+\end{itemize}
+Final project: single most important contribution toward the grade. You will be required to do the projects in groups of up to 2 members. The final project submission includes a final code, accompanying document and a 5-minute presentation.\\
+
+Homeworks: there will be 5 homeworks that will include programming assignments and theoretical questions. You are welcome to discuss with other students and use online resources to solve the questions. After that, however, all the submitted work should be your own. Please submit typed up homework solutions (handwritten solutions are often illegible and will not be graded) on Canvas as a pdf. \\
+
+Midterms: One in-class midterm will be held on October 19th.
+Another mid-term will be held on Nov. ...You are allowed to bring a single page cheat sheet of notes to your in-class midterm.
+
+\section{Honor code}
+
+Georgia Tech aims to cultivate a community based on trust, academic integrity, and honor. Students are expected to act according to the highest ethical standards.  For information on Georgia Tech's Academic Honor Code, please visit \verb+http://www.catalog.gatech.edu/policies/honor-code/+ or \verb+http://www.catalog.gatech.edu/rules/18/+. 
+
+Any student suspected of cheating or plagiarizing on a quiz, exam, or assignment will be reported to the Office of Student Integrity, who will investigate the incident and identify the appropriate penalty for violations. 
+
+\section{Accommodations for Students with Disabilities} 
+
+If you are a student with learning needs that require special accommodation, contact the Office of Disability Services at (404)894-2563 or \verb+http://disabilityservices.gatech.edu/+, as soon as possible, to make an appointment to discuss your special needs and to obtain an accommodations letter.  Please also e-mail me as soon as possible in order to set up a time to discuss your learning needs. 
+
+\section{Student-Faculty Expectations Agreement} 
+
+At Georgia Tech we believe that it is important to strive for an atmosphere of mutual respect, acknowledgement, and responsibility between faculty members and the student body. See http://www.catalog.gatech.edu/rules/22/ for an articulation of some basic expectation that you can have of me and that I have of you. In the end, simple respect for knowledge, hard work, and cordial interactions will help build the environment we seek. Therefore, I encourage you to remain committed to the ideals of Georgia Tech while in this class. 
+\bibliographystyle{abbrv}           % if you need a bibliography
+\bibliography{mybib}                % assuming yours is named mybib.bib
+
+
+%%%%%%%%%%% end of doc
+\end{document}
