@@ -2,43 +2,71 @@
 \usepackage[english]{babel}
 \usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
 \usepackage{scribe}
 \usepackage{listings}
 \usepackage{natbib,verbatim}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    }
+
 %\Scribe{Your Name}
-\Lecturer{Prof. Nisha Chandramoorthy (she/her)}
-\LectureNumber{Lecture 0}
+\Lecturer{Nisha Chandramoorthy (nishac@gatech.edu)}
+\LectureNumber{Computational Data Analysis}
 \LectureDate{22nd August 2023}
-\LectureTitle{Course Outline}
+\LectureTitle{Course outline}
 
 \lstset{style=mystyle}
 
 \begin{document}
-	\MakeScribeTop
+\MakeScribeTop
 
-In this course, we learn the mathematical foundations of modern machine learning methods with the goal of understanding how and when they do work and do not. We will learn about neural networks, but we will spend several lectures on classical statistical models and algorithms.
+In this course, we will learn the mathematical and computational foundations of machine learning methods with the goal of understanding i) how and when they do work and do not; and ii) how to use them in a principled manner. Besides neural networks, we will cover classical statistical models and data analysis methods that pre-date deep learning and are still widely used and/or are relevant for our fundamental understanding of learning, prediction and estimation with data.
+
+We will start with an overview of and try to reach the state-of-the-art research in the following topics:
+\begin{itemize}
+	\item \textbf{Statistical foundations of learning, learning models and algorithms}: Empirical risk minimization, regression models, classifiers, PAC learning, boosting, decision trees, clustering, support vector machines (SVMs), neural networks 
+	\item \textbf{Optimization methods and statistics} Convex optimization, Stochastic gradient descent and variants, generalization, kernel methods, model selection and cross-validation, bias-variance tradeoff
+	\item \textbf{Additional estimation/inference/learning models} Multiclass ranking, compressed sensing, principal component analysis, generative modeling, graphical models
+\end{itemize}
+\section{Prerequisites}
+A strong background in linear algebra, probability and statistics as well as mathematical maturity is necessary to succeed in this course. Additionally, you must be motivated to gain a foundational understanding of data analysis methods and interested in their principled application. In this case, you can definitely fill in gaps in your math background by working through textbook material in linear algebra and statistics. Good starting points are the course textbook appendices (see section \ref{sec:resources}) and the book ``Numerical Linear Algebra'' by Trefethen and Bau. 
 \section{General information}
 \begin{itemize}
-	\item Class time and location:
-	\item Office hours:
+	\item Class time and location: Tuesdays and Thursdays 12:30-1:45 pm, East Architecture 123.
+	\item Office hours: 30 minutes after each lecture
 	\item Instructor email: nishac@gatech.edu
-	\item TAs name and email: 
-	\item Prerequisites: 
+	\item TAs name and email: \textbf{Darryl Jacob} (djacob30@gatech.edu), 
+		\\ \textbf{Atharva Ketkar} (aketkar30@gatech.edu),
+		\textbf{Chengrui Li} (cnlichengrui@gatech.edu), 
+		\textbf{Akpevwe Ojameruaye} (aojameruaye3@gatech.edu), 
+		\textbf{Yusen Su} (ysu349@gatech.edu), 
+		and \textbf{Mithilesh Vaidya} (mithilesh.vaidya@gatech.edu) 
 \end{itemize}
-\section{Resources (not exhaustive)}
 
+\section{Resources (not exhaustive)}
+\label{sec:resources}
 \begin{itemize}
-	\item The textbook for the course will be \citep{shalev}. Other books we will cover material from are \citep{mohri}, \citep{murphy1} and \citep{murphy2}. These are available online. Some lectures will be based on research articles, and these will be cited during class and in the corresponding lecture notes. 
+	\item The textbook for the course will be ``Understanding machine learning: from theory to algorithms'' by Shalev-Shwartz and Ben-David. Other books we will cover material from are ``Foundations of machine learning'' by Mohri, Rostamizadeh and Talwalkar and ``Probabilistic machine learning'' (parts I and II) by Murphy. These are available online. Some lectures will be based on research articles and other books, and these will be cited during class. 
+As modern ML methods grow, so do the mathematical and computational questions around them. Hence, it is important to remember that this course is only a limited view at a vast landscape. Apart from similar courses offered across Georgia Tech (CS ML/ISyE 6740/\href{https://sites.gatech.edu/ashwin-pananjady/7750-mathematical-foundations-of-machine-learning-fall-22/}{7750}), there are other freely available course materials that will certainly enhance this view. Here are a couple: \href{https://ocw.mit.edu/courses/6-867-machine-learning-fall-2006/}{MIT 6.867} and \href{http://www.mit.edu/~9.520/fall19/}{MIT 6.860}.
+
+	\item Main website will be \href{https://canvas.gatech.edu}{Canvas}. We will use \href{https://piazza.com/gatech/fall2023/cse6740a/info}{Piazza} for discussions. Any technical question you have, chances are others have it too, and still others know how to solve, and so post publicly on Piazza for everyone's benefit. 
 \end{itemize}
-As modern ML methods grow, so do the mathematical and computational questions around them. Hence, it is important to remember that this course is only a limited view at a vast landscape. Apart from similar courses offered across Georgia Tech, there are other freely available course materials that will certainly enhance this view.
-Here are a few: \citep{philippe}, \citep{stanford}.
+\section{A note on the CSE qualifying exam}
+If you are taking the CSE ``Computational Data Analysis'' qualifying exam, please prepare all the topics listed in the \href{https://cse.gatech.edu/sites/default/files/documents/2023/Handbook-2023-06-07.pdf}{CSE graduate handbook} by taking additional courses or through self-study. Some of the listed topics (such as non-negative matrix factorization) will not be covered in this class, and some topics that will be covered are beyond the scope of the qualifying exam.
+\
 \section{Tentative course schedule}
+Please note that the plan below is subject to change.
 \subsection*{Part 1 - Learning: Foundations, models, algorithms}
 \begin{itemize}
-	\item[Lec 1] Least-squares regression, Tikhonov regularization
+	\item[Lec 1] Least-squares regression, Tikhonov regularization, Compressed sensing
 	\item[Lec 2] Logistic regression, perceptron algorithm, Empirical risk minimization
 	\item[Lec 3] Halfspaces and linear programming
-	\item[Lec ] Empirical risk minimization, neural network models
+	\item[Lec ] Neural network models and learning
 	\item[Lec 3] Boosting algorithm
 	\item[Lec ] Computational complexity of learning
 	\item[Lec ] Generalization
@@ -48,7 +76,7 @@ Here are a few: \citep{philippe}, \citep{stanford}.
 	\item{Lec ] Support Vector Machines, separating hyperplanes
 	\item[Lec ] Nearest neighbor classifier 
 	\item[Lec ] Decision trees, ranking
-	\item[Lec ] Multi-class classification
+	\item[Lec ] Multi-class classification, margin theory
 	\item[Lec ] Learning dynamical systems from timeseries data: Kalman filters
 	\item[Lec ] Data-driven operator learning
 \end{itemize}
@@ -67,6 +95,8 @@ Here are a few: \citep{philippe}, \citep{stanford}.
 
 \subsection*{Part 3: Other learning models and modalities}
 \begin{itemize}
+	\item[Lec ] PCA, ICA, kernel PCA
+	\item[Lec ] Manifold learning, Johnson-Lindenstrauss lemma
 	\item[Lec n] Generative models: Score-based generative models/diffusion models.
 	\item[Lec n+1] Variational Autoencoders, Generative adversarial neural networks
 	\item[Lec n+2] Optimal transport, mean-field games, stochastic optimal control revisited
@@ -82,26 +112,28 @@ The final grade is determined by:
 	\item Homework: 30\%
 	\item Midterm I and II: 30\%
 \end{itemize}
-Final project: single most important contribution toward the grade. You will be required to do the projects in groups of up to 2 members. The final project submission includes a final code, accompanying document and a 5-minute presentation.\\
+Final project: single most important contribution toward the grade. You can choose to do individual projects or in groups of 2. The final project submission includes a proposal (due mid November), code, accompanying report and a 5-minute presentation on the last week of class.\\
 
-Homeworks: there will be 5 homeworks that will include programming assignments and theoretical questions. You are welcome to discuss with other students and use online resources to solve the questions. After that, however, all the submitted work should be your own. Please submit typed up homework solutions (handwritten solutions are often illegible and will not be graded) on Canvas as a pdf. \\
+Homeworks: there will be 4 homework assignments (due dates TBD, but spread out evenly through the semester before the final project) that will include programming assignments and theoretical questions. You are welcome to discuss with other students and use online resources to solve the questions. After that, however, all the submitted work should be your own. Please submit typed up homework solutions (handwritten solutions are often illegible and will not be graded) on Canvas as a pdf. \\
 
-Midterms: One in-class midterm will be held on October 19th.
-Another mid-term will be held on Nov. ...You are allowed to bring a single page cheat sheet of notes to your in-class midterm.
+Midterms: One in-class midterm will be held on October 19th. Another mid-term will be take-home and due on November 7th in class. You are allowed to bring a single page cheat sheet of notes to your in-class midterm. We require that you follow the honor code for both midterms: no copying or cheating will be tolerated (see \ref{sec:honor}).
 
 \section{Honor code}
+\label{sec:honor}
 
-Georgia Tech aims to cultivate a community based on trust, academic integrity, and honor. Students are expected to act according to the highest ethical standards.  For information on Georgia Tech's Academic Honor Code, please visit \verb+http://www.catalog.gatech.edu/policies/honor-code/+ or \verb+http://www.catalog.gatech.edu/rules/18/+. 
+Georgia Tech aims to cultivate a community based on trust, academic integrity, and honor. Students are expected to act according to the highest ethical standards.  For information on Georgia Tech's Academic Honor Code, please visit \href{http://www.catalog.gatech.edu/policies/honor-code/}{this link} or \href{http://www.catalog.gatech.edu/rules/18/}{this one}. 
 
-Any student suspected of cheating or plagiarizing on a quiz, exam, or assignment will be reported to the Office of Student Integrity, who will investigate the incident and identify the appropriate penalty for violations. 
+Any student suspected of cheating or plagiarizing on a quiz, exam, or assignment will be reported to the Office of Student Integrity, who will investigate the incident and identify the appropriate penalty for violations.
+
+Ultimately, learning and engaging with the material, and having fun in the process is most important! Assessments and homeworks are no more than good motivators to keep you accountable in the learning process. It serves no purpose to violate the honor code. 
 
 \section{Accommodations for Students with Disabilities} 
 
-If you are a student with learning needs that require special accommodation, contact the Office of Disability Services at (404)894-2563 or \verb+http://disabilityservices.gatech.edu/+, as soon as possible, to make an appointment to discuss your special needs and to obtain an accommodations letter.  Please also e-mail me as soon as possible in order to set up a time to discuss your learning needs. 
+If you are a student with learning needs that require special accommodation, contact the Office of Disability Services at (404)894-2563 or \href{http://disabilityservices.gatech.edu/}{through their website}, as soon as possible, to make an appointment to discuss your special needs and to obtain an accommodations letter.  Please also e-mail me as soon as possible in order to set up a time to discuss your learning needs. 
 
 \section{Student-Faculty Expectations Agreement} 
 
-At Georgia Tech we believe that it is important to strive for an atmosphere of mutual respect, acknowledgement, and responsibility between faculty members and the student body. See http://www.catalog.gatech.edu/rules/22/ for an articulation of some basic expectation that you can have of me and that I have of you. In the end, simple respect for knowledge, hard work, and cordial interactions will help build the environment we seek. Therefore, I encourage you to remain committed to the ideals of Georgia Tech while in this class. 
+At Georgia Tech we believe that it is important to strive for an atmosphere of mutual respect, acknowledgement, and responsibility between faculty members and the student body. See \href{http://www.catalog.gatech.edu/rules/22/}{the catalog} for an articulation of some basic expectation that you can have of me and that I have of you. In the end, simple respect for knowledge, hard work, and cordial interactions will help build the environment we seek. Therefore, I encourage you to remain committed to the ideals of Georgia Tech while in this class. 
 \bibliographystyle{abbrv}           % if you need a bibliography
 \bibliography{mybib}                % assuming yours is named mybib.bib
 
