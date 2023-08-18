@@ -27,16 +27,15 @@
 
 In this course, we will learn the mathematical and computational foundations of machine learning methods with the goal of understanding i) how and when they do work and do not; and ii) how to use them in a principled manner. Besides neural networks, we will cover classical statistical models and data analysis methods that pre-date deep learning and are still widely used and/or are relevant for our fundamental understanding of learning, prediction and estimation with data.
 
-We will start with an overview of and try to reach the state-of-the-art research in the following topics:
+We will start with an overview of the following topics and try to connect them with the state-of-the-art in ML/statistics research:
 \begin{itemize}
 	\item \textbf{Statistical foundations of learning, learning models and algorithms}: Empirical risk minimization, regression models, classifiers, PAC learning, boosting, decision trees, clustering, support vector machines (SVMs), neural networks 
 	\item \textbf{Optimization methods and statistics} Convex optimization, Stochastic gradient descent and variants, generalization, kernel methods, model selection and cross-validation, bias-variance tradeoff
 	\item \textbf{Additional estimation/inference/learning models} Multiclass ranking, compressed sensing, principal component analysis, generative modeling, graphical models
 \end{itemize}
-\section{Prerequisites}
-A strong background in linear algebra, probability and statistics as well as mathematical maturity is necessary to succeed in this course. Additionally, you must be motivated to gain a foundational understanding of data analysis methods and interested in their principled application. In this case, you can definitely fill in gaps in your math background by working through textbook material in linear algebra and statistics. Good starting points are the course textbook appendices (see section \ref{sec:resources}) and the book ``Numerical Linear Algebra'' by Trefethen and Bau. 
 \section{General information}
 \begin{itemize}
+	\item 3 credits, two lectures per week, 4 homeworks, 2 midterms and 1 final project.
 	\item Class time and location: Tuesdays and Thursdays 12:30-1:45 pm, East Architecture 123.
 	\item Office hours: 30 minutes after each lecture
 	\item Instructor email: nishac@gatech.edu
@@ -48,11 +47,26 @@ A strong background in linear algebra, probability and statistics as well as mat
 		and \textbf{Mithilesh Vaidya} (mithilesh.vaidya@gatech.edu) 
 \end{itemize}
 
+\section{Prerequisites and tips for success}
+A strong background in linear algebra, probability and statistics as well as mathematical maturity are necessary to succeed in this course. You must be skilled at Python/Julia programming for ML/data science. Additionally, you must be motivated to gain a foundational understanding of data analysis methods and interested in their principled application. In this case, you can definitely fill in gaps in your math and computing background by working through textbook material in linear algebra and statistics and through programming assignments. Good starting points are the course textbook appendices (see section \ref{sec:resources}) and the books ``Numerical Linear Algebra'' by Trefethen and Bau and ``Introduction to Probability'' by Bertsekas and Tsitsiklis.
+
+We emphasize that helping each other understand the concepts and enjoy the mathematical and computational aspects of learning (pun intended!) together is the main goal of this course. Spending time building a strong foundation by learning classical techniques will help in forming a good mental model of this vast field, and help us keep up with (and not be intimidated by) the proliferating research in the area of data science methods.
+
+\section{Learning outcomes}
+
+Students who attend all the lectures and complete the homeworks and the final project will 
+\begin{itemize}
+	\item get an overview of supervised learning models for regression and classification, and some unsupervised learning models and methods 
+	\item understand the mathematical and statistical foundations of learning and data mining
+	\item gain experience implementing machine learning methods using Pytorch or other standard libraries
+	\item use their foundational understanding to select, analyze and interpret results from machine learning and optimization methods in a principled manner taking into account application needs. 
+\end{itemize}
+
 \section{Resources (not exhaustive)}
 \label{sec:resources}
 \begin{itemize}
 	\item The textbook for the course will be ``Understanding machine learning: from theory to algorithms'' by Shalev-Shwartz and Ben-David. Other books we will cover material from are ``Foundations of machine learning'' by Mohri, Rostamizadeh and Talwalkar and ``Probabilistic machine learning'' (parts I and II) by Murphy. These are available online. Some lectures will be based on research articles and other books, and these will be cited during class. 
-As modern ML methods grow, so do the mathematical and computational questions around them. Hence, it is important to remember that this course is only a limited view at a vast landscape. Apart from similar courses offered across Georgia Tech (CS ML/ISyE 6740/\href{https://sites.gatech.edu/ashwin-pananjady/7750-mathematical-foundations-of-machine-learning-fall-22/}{7750}), there are other freely available course materials that will certainly enhance this view. Here are a couple: \href{https://ocw.mit.edu/courses/6-867-machine-learning-fall-2006/}{MIT 6.867} and \href{http://www.mit.edu/~9.520/fall19/}{MIT 6.860}.
+As modern ML methods grow, so do the mathematical and computational questions around them. Hence, it is important to remember that this course is only a limited view of a vast landscape. Apart from similar courses offered across Georgia Tech (CS ML/ISyE 6740/\href{https://sites.gatech.edu/ashwin-pananjady/7750-mathematical-foundations-of-machine-learning-fall-22/}{7750}), there are other freely available course materials that will certainly enhance this view. Here are a couple: \href{https://ocw.mit.edu/courses/6-867-machine-learning-fall-2006/}{MIT 6.867} and \href{http://www.mit.edu/~9.520/fall19/}{MIT 6.860}.
 
 	\item Main website will be \href{https://canvas.gatech.edu}{Canvas}. We will use \href{https://piazza.com/gatech/fall2023/cse6740a/info}{Piazza} for discussions. Any technical question you have, chances are others have it too, and still others know how to solve, and so post publicly on Piazza for everyone's benefit. 
 \end{itemize}
@@ -60,63 +74,57 @@ As modern ML methods grow, so do the mathematical and computational questions ar
 If you are taking the CSE ``Computational Data Analysis'' qualifying exam, please prepare all the topics listed in the \href{https://cse.gatech.edu/sites/default/files/documents/2023/Handbook-2023-06-07.pdf}{CSE graduate handbook} by taking additional courses or through self-study. Some of the listed topics (such as non-negative matrix factorization) will not be covered in this class, and some topics that will be covered are beyond the scope of the qualifying exam.
 \
 \section{Tentative course schedule}
-Please note that the plan below is subject to change.
+Please note that the plan below is subject to change, both in terms of the content and order.
 \subsection*{Part 1 - Learning: Foundations, models, algorithms}
 \begin{itemize}
-	\item[Lec 1] Least-squares regression, Tikhonov regularization, Compressed sensing
-	\item[Lec 2] Logistic regression, perceptron algorithm, Empirical risk minimization
-	\item[Lec 3] Halfspaces and linear programming
-	\item[Lec ] Neural network models and learning
-	\item[Lec 3] Boosting algorithm
-	\item[Lec ] Computational complexity of learning
-	\item[Lec ] Generalization
-	\item[Lec ] Kernel methods, kernel trick
-	\item[Lec ] Clustering, k-means, spectral clustering
-	\item[Lec ] Gaussian mixture models, Expectation Maximization algorithm
-	\item{Lec ] Support Vector Machines, separating hyperplanes
-	\item[Lec ] Nearest neighbor classifier 
-	\item[Lec ] Decision trees, ranking
-	\item[Lec ] Multi-class classification, margin theory
-	\item[Lec ] Learning dynamical systems from timeseries data: Kalman filters
-	\item[Lec ] Data-driven operator learning
+	\item[Week 1] Least-squares regression, Compressed sensing, LASSO, Logistic regression, perceptron algorithm, Empirical risk minimization
+	\item[Week 2] Continuation of linear models, Halfspaces and linear programming, Gaussian mixtures
+	\item[Week 3 ] Neural network models, generalization, computational complexity of learning, PAC learning
+	\item[Week 4] Boosting algorithm, Support Vector machines, Decision trees, multi-class classifiers
+	\item[Week 5] Kernel methods, kernel trick, basis expansions, PCA, ICA
+	\item[Week 6] Clustering, k-means, spectral clustering, graphical models
 \end{itemize}
 \subsection*{Part 2: Statistics and optimization}
 \begin{itemize}
-	\item[Lec ] Kernel density estimation
-	\item[Lec ] Probability measure distances, divergences
-	\item[Lec ] Model selection and cross-validation
-	\item[Lec ] Bayesian information criterion
-	\item[Lec ] Gradient and stochastic gradient descent
-	\item[Lec ] Regularization, overfitting
-	\item[Lec ] Reinforcement learning, stochastic optimal control
-	\item[Lec ] Generative models, Maximum Likelihood estimation, N\"aive Bayes
-	\item[Lec ] Bias-complexity tradeoff, generalization bounds, algorithmic stability
-\end{itemize}
+	\item[Week 6] Kernel density estimation, Model selection and cross-validation, Bayesian inference
+	\item[Week 7] Variational inference, parameter estimation methods, probabilistic classifiers
+	\item[Week 8] Gradient and stochastic gradient descent variants, regularization, overfitting, generalization revisited
+
+	\item[Week 9] Margin theory, Bias-complexity tradeoff, generalization bounds, algorithmic stability
+
+	\end{itemize}
 
 \subsection*{Part 3: Other learning models and modalities}
 \begin{itemize}
-	\item[Lec ] PCA, ICA, kernel PCA
-	\item[Lec ] Manifold learning, Johnson-Lindenstrauss lemma
-	\item[Lec n] Generative models: Score-based generative models/diffusion models.
-	\item[Lec n+1] Variational Autoencoders, Generative adversarial neural networks
-	\item[Lec n+2] Optimal transport, mean-field games, stochastic optimal control revisited
-	\item[Lec ] Recurrent, convolutional networks, feedforward, 
-	\item[Lec ] Graph learning, graphical models
+	\item[Week 10] Reinforcement learning, stochastic optimal control
+	\item[Week 11 ] SDEs, MCMC revisited, Score-based generative models/diffusion models.
+	\item[Week 12] Variational Autoencoders, Generative adversarial neural networks
+	\item[Week 13] Learning dynamical systems, operator learning
+\end{itemize}
+Other possible topics, if time permits:
+\begin{itemize}
+	\item Optimal transport, mean-field games
+	\item Graph neural networks
+	\item Transformers, LSTMs
+	\item Recurrent neural networks
 \end{itemize}
 
 \section{Grading information and late policy}
 
-The final grade is determined by:
+The final grade will be determined by performance on:
 \begin{itemize}
 	\item Final project: 40\%
 	\item Homework: 30\%
 	\item Midterm I and II: 30\%
 \end{itemize}
-Final project: single most important contribution toward the grade. You can choose to do individual projects or in groups of 2. The final project submission includes a proposal (due mid November), code, accompanying report and a 5-minute presentation on the last week of class.\\
 
-Homeworks: there will be 4 homework assignments (due dates TBD, but spread out evenly through the semester before the final project) that will include programming assignments and theoretical questions. You are welcome to discuss with other students and use online resources to solve the questions. After that, however, all the submitted work should be your own. Please submit typed up homework solutions (handwritten solutions are often illegible and will not be graded) on Canvas as a pdf. \\
+\textbf{Final project}: single most important contribution toward the grade. You can choose to do individual projects or in groups of 2. The final project submission includes a proposal (due mid November), code, accompanying report and a 5-minute presentation in the last week of class. A final project rubric and a set of guidelines will be posted on canvas before the proposal due date.\\
 
-Midterms: One in-class midterm will be held on October 19th. Another mid-term will be take-home and due on November 7th in class. You are allowed to bring a single page cheat sheet of notes to your in-class midterm. We require that you follow the honor code for both midterms: no copying or cheating will be tolerated (see \ref{sec:honor}).
+\textbf{Homeworks}: there will be 4 homework assignments (due dates TBD, but spread out evenly through the semester before the final project) that will include programming assignments and theoretical questions. You are welcome to discuss with other students and use online resources to solve the questions. After that, however, all the submitted work should be your own. Please submit typed up homework solutions (handwritten solutions are often illegible and will not be graded) on Canvas as a pdf. \\
+
+\textbf{Midterms}: One in-class midterm will be held on October 19th. Another mid-term will be take-home and due on November 7th in class. You are allowed to use a single page cheat sheet of your own notes during your midterms and \textbf{no} other material. We require that you follow the honor code for both midterms: no copying or cheating will be tolerated (see \ref{sec:honor}).\\
+
+\textbf{Late policy -- only applies to homeworks and final project proposal}: there is a late penalty of 25\% for a submission late by up to 24 hours, 50\% for a submission delayed beyond 24 hours and up to 48 hours. 
 
 \section{Honor code}
 \label{sec:honor}
@@ -134,8 +142,8 @@ If you are a student with learning needs that require special accommodation, con
 \section{Student-Faculty Expectations Agreement} 
 
 At Georgia Tech we believe that it is important to strive for an atmosphere of mutual respect, acknowledgement, and responsibility between faculty members and the student body. See \href{http://www.catalog.gatech.edu/rules/22/}{the catalog} for an articulation of some basic expectation that you can have of me and that I have of you. In the end, simple respect for knowledge, hard work, and cordial interactions will help build the environment we seek. Therefore, I encourage you to remain committed to the ideals of Georgia Tech while in this class. 
-\bibliographystyle{abbrv}           % if you need a bibliography
-\bibliography{mybib}                % assuming yours is named mybib.bib
+%\bibliographystyle{abbrv}           % if you need a bibliography
+%\bibliography{mybib}                % assuming yours is named mybib.bib
 
 
 %%%%%%%%%%% end of doc
