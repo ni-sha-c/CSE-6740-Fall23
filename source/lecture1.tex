@@ -8,29 +8,25 @@
 \definecolor{darkcerulean}{rgb}{0.03, 0.27, 0.49}
 \newcommand{\citesmall}[1]{[{\color{darkcerulean}\begin{small} \textbf{#1} \end{small}}]}
 \setbeamertemplate{footline}[frame number]
-
-\newcommand{\Exp}{\mathbb{E}}
-\newcommand{\Var}{\text{var}}
-\newcommand{\vF}{\textbf{F}}
-\newcommand{\Jbar}{\bar{J}}
-\newcommand{\zbar}{\bar{z}}
-\newcommand{\vX}{{\bf X}}
-\newcommand{\vB}{{\bf B}}
-\newcommand{\vy}{{\bf y}}
-\newcommand{\vf}{{\bf f}}
-\newcommand{\mP}{{\mathbb{P}}}
-\newcommand{\Jens}{\langle J \rangle}
-\newcommand{\vA}{\mathbf{A}}
-\newcommand{\vv}{\mathbf{v}}
 \DeclareMathOperator*{\argmin}{arg\,min}
 \usepackage{graphicx}  % Required for including images
 
 \usepackage{booktabs} % Top and bottom rules for tables
-\newcommand{\xcap}{ \hat{{\bf x}} }
-\newcommand{\ycap}{ \hat{{\bf y}} }
-\newcommand{\zcap}{ \hat{{\bf z}} }
 \definecolor{burgundy}{rgb}{0.5, 0.0, 0.13}
 \newcommand{\highlight}[1]{{\color{burgundy} \textbf{#1}}}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=magenta,
+    pdftitle={Course Syllabus},
+    pdfauthor={Nisha Chandramoorthy},
+    pdflang={en-US}
+}
+
+
+
 %----------------------------------------------------------------------------------------
 %	TITLE SECTION 
 %----------------------------------------------------------------------------------------
@@ -49,18 +45,68 @@
 %----------------------------------------------------------------------------------------
 %	OBJECTIVES
 %----------------------------------------------------------------------------------------
-				\begin{frame}{Computational dynamics + statistics}
-						\begin{itemize}
-								\item \highlight{Goal}: Develop \highlight{efficient} and \highlight{rigorous} numerical methods for complex nonlinear dynamical systems
+\begin{frame}{Course logistics}
+\begin{itemize}
+	\item Instructor: Nisha Chandramoorthy. 
+	\pause
+	\item Interested in teaching and learning about foundations of machine learning
+	\pause
+	\item 6 TAs: Akpevwe Ojameruaye, Atharva Ketkar, Chengrui Li, Darryl Jacob,, Mithilesh Vaidya, and Yusen Su 
+	\pause
+	\item Lectures: TR 12:30-1:45 pm. OH: 30 minutes after. Location: East Architecture 123.
+	\pause
+	\item Grade: 4 homeworks (30\%), 2 midterms (30\%), final project (40\%)
+	\pause
+\item \href{https://canvas.gatech.edu}{Canvas} (see syllabus), \href{https://www.gradescope.com/courses/578036}{gradescope}, \href{https://piazza.com/gatech/fall2023/cse6740a/info}{Piazza}, \href{https://github.com/ni-sha-c/CSE-6740-Fall23}{Github}
+\end{itemize}
+\end{frame}
 
-								\item Results from dynamical systems and ergodic theory help develop complementary approaches to ML-based  
-						\end{itemize}
-						\pause
-						\begin{figure}
-						\includegraphics[width=0.3\textwidth]{figs/plane.png}
-						\includegraphics[width=0.3\textwidth]{figs/bio.png}
-						\includegraphics[width=0.3\textwidth]{figs/climate.png}
-								\caption{Left: Aftosmis et al 2015; Center: Armingol et al 2021; Right: Froyland et al 2014}
-						\end{figure}
-				\end{frame}
+\begin{frame}{Machine learning and data mining: what are they?}
+\begin{itemize}
+	\item ``Automated detection of meaningful patterns in data'' - Shalev-Shwartz and Ben-David.
+	\pause
+	\item  Goal in this class: understand the foundations (``why''s and ``how''s) of ML
+	\pause
+	\item ML = Compute + data
+	\pause
+	\item Compute: Optimization, representation/models
+	\pause
+	\item Data: distributions, features/compression, statistics
+\end{itemize}
+\end{frame}
+\begin{frame}{Categorizations of learning}
+	\begin{itemize}
+		\item Supervised, unsupervised, self-supervised, semi-supervised 
+		\pause
+	\item Supervised: using \emph{experience} (training data) to learn  
+	\pause
+	\item Unsupervised: using \emph{data} to identify patterns, match distributions?
+	\pause
+	\item Mode of learning and testing are different 
+	\end{itemize}
+\end{frame}
+\begin{frame}{Research frontier in understanding}
+	\begin{itemize}
+		\item how to make and test conjectures about how large language models (LLMs) learn?
+		\pause
+		\item ``how to train them better (more efficiently)'' -- number of practical questions perhaps benefit from theory
+
+	\end{itemize}
+\end{frame}
+\begin{frame}{History - I}
+\end{frame}
+\begin{frame}{Recent breakthroughs}
+
+\end{frame}
+\begin{frame}{Tools for the ``why'' and ``how'' questions}
+
+\end{frame}
+\begin{frame}{Supervised learning framework}
+\end{frame}
+\begin{frame}{PAC learning}
+\end{frame}
+\begin{frame}{Linear regression}
+
+
+\end{frame}
 \end{document}
