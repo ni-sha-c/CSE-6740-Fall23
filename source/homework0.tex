@@ -13,14 +13,16 @@
     linkcolor=blue,
     filecolor=magenta,      
     urlcolor=magenta,
-    pdftitle=Homework0,
-    pdfauthor="Nisha Chandramoorthy"}
+    pdftitle={Homework0},
+    pdfauthor={Nisha Chandramoorthy},
+    pdflang={en-US}
+}
 
 %\Scribe{Your Name}
 \Lecturer{Nisha Chandramoorthy (nishac@gatech.edu)}
 \LectureNumber{Homework 0}
-\LectureDate{August 22 2023}
-\LectureTitle{: Background review}
+\LectureDate{August 22, 2023}
+\LectureTitle{Background review}
 
 \lstset{style=mystyle}
 
@@ -28,21 +30,23 @@
 \MakeScribeTop
 
 \begin{itemize}
-	\item This is an assessment of your linear algebra and probability background to help us determine whether this class will be appropriate for you this semester or if you should take consider taking it later.
+	\item This is an assessment of your linear algebra and probability background.
+	\item The maximum time you are allowed to spend on this is \textbf{30 minutes}.
+	\item This assessment will help us determine whether this class will be appropriate for you this semester or if you should take consider taking it later.
 	\item To keep the assessment meaningful, please attempt to solve the question yourself, without taking help from others and online resources.
-	\item Please turn in your work on Gradescope. 
-	\item If you decide to take this class and get both questions right, it will provide you with a $1\%$ bonus to your final grade.
+	\item Please turn in your work at the end of class on a sheet of paper or on Gradescope. 
+	\item If you decide to take this class and get both the questions right, you will obtain a $1\%$ bonus to your final grade.
 \end{itemize}
-
+\vspace{1in}
 \begin{enumerate}
-	\item If $A \in \mathbb{C}^{m\times m},$ the SVD of $A$ is given by $A = U \Sigma V^*,$ give an eigen decomposition of the $2m \times 2m$ matrix,
+	\item (Trefethen and Bau 5.4) If $A \in \mathbb{C}^{m\times m},$ and the SVD of $A$ is given by $A = U \Sigma V^*,$ give an eigen decomposition of the $2m \times 2m$ matrix,
 		\begin{equation}
 		B = \begin{bmatrix}
 		0 & A^* \\
 		A & A
 		\end{bmatrix}.
 		\end{equation}
-	\item  
+	\item A student is given a surprise quiz consisting of $n$ questions. The student is 50\% sure of the first answer. For the $i$th question, the student knows the answer with probability $p_i = (i-1)/n,\;\; n \geq i > 1.$ Define $s := 0.25 + \sum_{i=1}^{n-1} i(n-i)/n^2.$ Estimate an upper bound for the probability that the student's score falls outside the range $(n/2 - 2\sqrt{s}, n/2 + 2\sqrt{s})$. Hint: use Chebyshev's inequality. 
 \end{enumerate}
 
 %\bibliographystyle{abbrv}           % if you need a bibliography
