@@ -10,7 +10,7 @@
 \setbeamertemplate{footline}[frame number]
 \DeclareMathOperator*{\argmin}{arg\,min}
 \usepackage{graphicx}  % Required for including images
-
+\usepackage{bbm}
 \usepackage{booktabs} % Top and bottom rules for tables
 \definecolor{burgundy}{rgb}{0.5, 0.0, 0.13}
 \newcommand{\highlight}[1]{{\color{burgundy} \textbf{#1}}}
@@ -129,17 +129,51 @@
 		\item First neural networks: 1950s [Minsky and others]
 	\end{itemize}
 \end{frame}
-\begin{frame}{Tools for the ``why'' and ``how'' questions}
+\begin{frame}{Supervised learning framework}
 	\begin{itemize}
-		\item 
+		\item Distribution $\mathcal{D}$ over the joint distribution of random variables $Z = (X, Y)$, where $X$ is an input and $Y$ is a label/output.
+		\pause
+	\item Labeled training data, $S = \{z_i = (x_i, y_i)\}, 1\leq i \leq m.$ Generally iid from $\mathcal{D}^m.$
+		\pause
+		\item Learner's output: predicted function or hypothesis, a transformation $h$ from $X$ to $Y$.
+		\pause
+	\item Loss function, measure of risk:  $\ell(z, h) \in \mathbb{R}$. e.g., $\ell(z) =  \mathbbm{1}_{h(x) \neq y}.$ (classification)
+	\pause
+	\item Generalization error or risk: 
+		$$R(h) = E_{z\sim \mathcal{D}} \ell(z)$$
 	\end{itemize}
 \end{frame}
-\begin{frame}{Supervised learning framework}
+\begin{frame}{Empirical Risk Minimization}
+	\begin{itemize}
+		\item Take classifier $h$, $R(h) = \mathcal{D}(\{z: h(x) \neq y\}).$
+		\pause
+		\item When you have finite amount of data
+		$$ \hat{R}_S(h) = \dfrac{1}{m} \sum_{z \in S} \ell(z) = \dfrac{|\{z \in S: h(x) \neq y\}|}{m}.$$
+		\pause
+	\item ERM: find $h$ that minimizes $\hat{R}_S(h).$
+	\pause
+	\item Theory of supervised learning suggests that ERM leads to small generalization error with high probability
+	\pause
+	\item Now we will prove this result formally. 
+	\pause
+\item Next time: Linear models.
+\end{itemize}
 \end{frame}
-\begin{frame}{PAC learning}
+\begin{frame}{Finite hypothesis classes}
+	\begin{itemize}
+		\item ERM rules can lead to bad generalization
+		\pause
+		\item Why? Overfitting
+		\pause
+		\item Example
+		\pause
+		\item One way to reduce overfitting: inductive bias. Choose $\mathcal{H}$ based on prior knowledge.
+		\pause 
+		\item Later: when does memorization of training data lead to good generalization?
+		\pause
+	\item Now: simple case of finite $\mathcal{H}$. 
+	
+	\end{itemize}
 \end{frame}
-\begin{frame}{Linear regression}
 
-
-\end{frame}
 \end{document}
