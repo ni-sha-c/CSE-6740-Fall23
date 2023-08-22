@@ -137,17 +137,17 @@
 		\pause
 		\item Learner's output: predicted function or hypothesis, a transformation $h$ from $X$ to $Y$.
 		\pause
-	\item Loss function, measure of risk:  $\ell(z, h) \in \mathbb{R}$. e.g., $\ell(z) =  \mathbbm{1}_{h(x) \neq y}.$ (classification)
+	\item Loss function, measure of risk:  $\ell(z, h) \in \mathbb{R}$. e.g., $\ell(z, h) =  \mathbbm{1}_{h(x) \neq y}.$ (classification)
 	\pause
 	\item Generalization error or risk: 
-		$$R(h) = E_{z\sim \mathcal{D}} \ell(z)$$
+		$$R(h) = E_{z\sim \mathcal{D}} \ell(z, h)$$
 	\end{itemize}
 \end{frame}
 \begin{frame}{Empirical Risk Minimization}
 	\begin{itemize}
 		\item Take classifier $h$, $R(h) = \mathcal{D}(\{z: h(x) \neq y\}).$
 		\pause
-		\item When you have finite amount of data
+		\item When you have finite amount of data, empirical risk or training loss
 		$$ \hat{R}_S(h) = \dfrac{1}{m} \sum_{z \in S} \ell(z) = \dfrac{|\{z \in S: h(x) \neq y\}|}{m}.$$
 		\pause
 	\item ERM: find $h$ that minimizes $\hat{R}_S(h).$
