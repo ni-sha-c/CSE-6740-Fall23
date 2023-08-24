@@ -93,35 +93,51 @@
 	\end{equation}
 \pause
 \begin{itemize}
+	\item $\Phi: \mathbb{X} \to \mathbb{R}^d$ is a set of \emph{features}.
+	\pause
 	\item Linear regression seeks ERM solution for square loss
 	\pause
 	\item $${\rm arg min}_{w, b} \dfrac{1}{m} (w^\top \Phi(x_i) + b - y_i)^2$$
 	\pause 
-\item Equivalently, where $X$ is $n\times (d+1)$ matrix with rows $X_i = (\Phi(x_i)^\top, 1)$, $W = [w_1, \cdots, w_d, 1]^\top$, $Y = [y_1, \cdots, y_n]^\top$,
+\item Equivalently, where $X$ is $m\times (d+1)$ matrix with rows $X_i = (\Phi(x_i)^\top, 1)$, $W = [w_1, \cdots, w_d, 1]^\top$, $Y = [y_1, \cdots, y_m]^\top$,
 	\pause
 	$$ {\rm arg min}_{W} \dfrac{1}{m} \|X W - Y\|^2$$
 \item Features may be defined by kernels
 \end{itemize}
 \end{frame}
-\begin{frame}{Least squares solutions}
+\begin{frame}{Least squares solutions: the optimization way}
 	\begin{itemize}
-		\item Case 1: $d+1 = n$, $X$ is invertible. $W = X^{-1} Y$
+		\item Convex, differentiable function of $W$ -- composition of convex, differentiable functions
+		\pause
+		\item Global minimum is the extremal point where derivative vanishes
+		\pause
+		\item $\nabla \dfrac{1}{m}\|X W - Y\|^2 = \dfrac{2}{m} X^T(XW - Y)$
+		\pause
+		\item $X^T X W = X^T Y$. Can also get this by differentiating before writing in matrix form
+		\pause
+		\item When is $X^T X = \sum_{i=1}^m \Phi(x_i) \Phi(x_i)^T$ invertible? When the training features span $\mathbb{R}^d$.  
+	\end{itemize}
+\end{frame}
+\begin{frame}{Least squares solutions: the linear algebraic way}
+	\begin{itemize}
+		\item Case 1: $d+1 = m$, $X$ is invertible. $W = X^{-1} Y$
 		\pause 
-	\item Case 2: $d+1 > n$, underdetermined/overparameterized. If $X$ has full row rank, then, many solutions. Min norm solution	$$ W = X^\top (X X^\top)^{-1} Y$$
+	\item Case 2: $d+1 > m$, underdetermined/overparameterized. If $X$ has full row rank, then, min norm solution	$$ W = X^\top (X X^\top)^{-1} Y$$
 \pause
-	\item Case 3: $n > d+1$, overdetermined. If $X$ has full col rank, then, many solutions. Min norm solution $$ W = (X^\top X)^{-1} X^\top Y$$
-
+	\item Case 3: $m > d+1$, overdetermined. If $X$ has full col rank, then, many solutions. Min norm solution $$ W = (X^\top X)^{-1} X^\top Y$$
+	\pause
+\item Can solve normal equations above directly, or use iterative methods for linear systems. Cost ${\cal O}(d^3)$ 
 \end{itemize}
 \end{frame}
 \begin{frame}{Gauss Markov theorem}
 	\begin{itemize}
-		\item Take $y_i$ to be random with variance $\sigma^2$, $x_i$ to be non-random.
+		\item Take noisy $y_i = x_i^\top W  + \epsilon_i,$ with $E\epsilo_i = 0$ and ${\rm Var}(\epsilon_i) = \sigma^2$; $x_i$ is non-random.
 		\pause
 		\item Statement: the OLS estimator is the best linear unbiased estimator (blue). It has the lowest variance.
 		\pause
-	\item Proof: consider another linear estimator $W' = C Y,$ for some $(d+1)\times n$ matrix $C =  (X^\top X)^{-1} X^\top Y + D$. 
+	\item Proof: consider another linear estimator $W' = C Y,$ for some $(d+1)\times n$ matrix $C =  (X^\top X)^{-1} X^\top + D$. 
 	\pause 
-	\item For $W'$ to be unbiased, show $DX = 0$. Then show, ${\rm Var}(W') = {\rm Var}(W) + \sigma^2 DD'^\top.$
+	\item For $W'$ to be unbiased, show $DX = 0$. Then show, ${\rm Var}(W') = {\rm Var}(W) + \sigma^2 DD^\top.$
 	\pause
 	\item Since $DD^\top$ is positive semi-definite, qed.
 	\end{itemize}
@@ -130,6 +146,8 @@
 	\begin{itemize}
 		\item Motivation: unbiased estimation does not mean least mean-squared error
 		\pause
+	\item Let true $h_W \in \mathcal{H}.$ Mean-squared error of statistical estimator of $W,$ $\hat{W},$ is its variance + bias-squared
+		$$E[(\hat{W}_i - W_i)^2) = {\rm Var}(\hat{W}_i) + (E[\hat{W}_i] - W_i)^2.$$
 		\item 
 	$$ {\rm arg min}_{W} \dfrac{1}{m} \|X W - Y\|^2 + \lambda \|W\|^2.$$
 		\pause
@@ -146,7 +164,7 @@
 		\item Revisit convex optimization. Derive solution using KKT conditions.
 		\pause
 		\item Now simply use convexity and differentiability to obtain global minimum:
-			$$W = (X^\top X + \lambda I)^{-1} X^\top Y$$. 
+			$$W = (X^\top X + \lambda I)^{-1} X^\top Y.$$ 
 		\pause
 		\item LASSO: with $l^1$ regularization.
 		\pause
