@@ -51,7 +51,7 @@
 	\pause
 	\item Interested in teaching and learning about foundations of machine learning
 	\pause
-	\item 6 TAs: Akpevwe Ojameruaye, Atharva Ketkar, Chengrui Li, Darryl Jacob,, Mithilesh Vaidya, and Yusen Su 
+	\item 6 TAs: Akpevwe Ojameruaye, Atharva Ketkar, Chengrui Li, Darryl Jacob, Mithilesh Vaidya, and Yusen Su 
 	\pause
 	\item Lectures: TR 12:30-1:45 pm. OH: 30 minutes after. Location: East Architecture 123.
 	\pause
@@ -148,7 +148,7 @@
 		\item Take classifier $h$, $R(h) = \mathcal{D}(\{z: h(x) \neq y\}).$
 		\pause
 		\item When you have finite amount of data, empirical risk or training loss
-		$$ \hat{R}_S(h) = \dfrac{1}{m} \sum_{z \in S} \ell(z) = \dfrac{|\{z \in S: h(x) \neq y\}|}{m}.$$
+		$$ \hat{R}_S(h) = \dfrac{1}{m} \sum_{z \in S} \ell(z,h) = \dfrac{|\{z \in S: h(x) \neq y\}|}{m}.$$
 		\pause
 	\item ERM: find $h$ that minimizes $\hat{R}_S(h).$
 	\pause
