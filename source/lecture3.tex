@@ -1,0 +1,177 @@
+\documentclass[final]{beamer}
+\usepackage{eulervm,verbatim}          
+\usepackage[scaled]{helvet}
+\usepackage[most]{tcolorbox}
+\setbeamercolor{frametitle}{fg=black,bg=white} % Colors of the block titles
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+\definecolor{darkcerulean}{rgb}{0.03, 0.27, 0.49}
+\newcommand{\citesmall}[1]{[{\color{darkcerulean}\begin{small} \textbf{#1} \end{small}}]}
+\setbeamertemplate{footline}[frame number]
+\DeclareMathOperator*{\argmin}{arg\,min}
+\usepackage{graphicx}  % Required for including images
+\usepackage{bbm}
+\usepackage{booktabs} % Top and bottom rules for tables
+\definecolor{burgundy}{rgb}{0.5, 0.0, 0.13}
+\newcommand{\highlight}[1]{{\color{burgundy} \textbf{#1}}}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=magenta,
+    pdftitle={CSE6740-Lecture 2},
+    pdfauthor={Nisha Chandramoorthy},
+    pdflang={en-US}
+}
+
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION 
+%----------------------------------------------------------------------------------------
+\title{\begin{huge}{CSE 6740 A/ISyE 6740: Computational Data Analysis: Introductory lecture}\end{huge}} % Poster title
+
+
+\author{Nisha Chandramoorthy} % Author(s)
+
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\frame{\titlepage}
+
+%----------------------------------------------------------------------------------------
+%	OBJECTIVES
+%----------------------------------------------------------------------------------------
+
+\begin{frame}{Last time}
+\begin{itemize}
+	\item  Goal in this class: understand the foundations (``why''s and ``how''s) of ML
+	\pause
+	\item Supervised, unsupervised, self-supervised, semi-supervised overview
+	\pause 
+	\item Empirical risk minimization, finite hypothesis classes
+	\pause 
+	\item Overfitting, inductive bias, Intro to PAC learning
+\end{itemize}
+\end{frame}
+\begin{frame}{Supervised learning framework}
+	\begin{itemize}
+		\item Distribution $\mathcal{D}$ over the joint distribution of random variables $Z = (X, Y)$, where $X$ is an input and $Y$ is a label/output.
+		\pause
+	\item Labeled training data, $S = \{z_i = (x_i, y_i)\}, 1\leq i \leq m.$ Generally iid from $\mathcal{D}^m.$
+		\pause
+		\item Learner's output: predicted function or hypothesis, a transformation $h$ from $X$ to $Y$.
+		\pause
+	\item Loss function, measure of risk:  $\ell(z, h) \in \mathbb{R}$. e.g., $\ell(z, h) =  \mathbbm{1}_{h(x) \neq y}.$ (classification)
+	\pause
+	\item Generalization error or risk: 
+		$$R(h) = E_{z\sim \mathcal{D}} \ell(z, h)$$
+	\end{itemize}
+\end{frame}
+\begin{frame}{Empirical Risk Minimization}
+	\begin{itemize}
+		\item Take classifier $h$, $R(h) = \mathcal{D}(\{z: h(x) \neq y\}).$
+		\pause
+		\item When you have finite amount of data, empirical risk or training loss
+		$$ \hat{R}_S(h) = \dfrac{1}{m} \sum_{z \in S} \ell(z) = \dfrac{|\{z \in S: h(x) \neq y\}|}{m}.$$
+		\pause
+	\item ERM: find $h$ that minimizes $\hat{R}_S(h).$
+	\pause
+	\item Theory of supervised learning suggests that ERM leads to small generalization error with high probability
+	\pause
+	\item Now we will prove this result formally. 
+	\pause
+\item After that: Linear models.
+\end{itemize}
+\end{frame}
+\begin{frame}{Linear models}
+	\begin{equation}
+		\mathcal{H} = \{h(\cdot, w, b): h(x, w, b) = w\cdot \Phi(x) + b, w \in \mathbb{R}^d, b \in \mathbb{R} \}
+	\end{equation}
+\pause
+\begin{itemize}
+	\item $\Phi: \mathbb{X} \to \mathbb{R}^d$ is a set of \emph{features}.
+	\pause
+	\item Linear regression seeks ERM solution for square loss
+	\pause
+	\item $${\rm arg min}_{w, b} \dfrac{1}{m} (w^\top \Phi(x_i) + b - y_i)^2$$
+	\pause 
+\item Equivalently, where $X$ is $m\times (d+1)$ matrix with rows $X_i = (\Phi(x_i)^\top, 1)$, $W = [w_1, \cdots, w_d, 1]^\top$, $Y = [y_1, \cdots, y_m]^\top$,
+	\pause
+	$$ {\rm arg min}_{W} \dfrac{1}{m} \|X W - Y\|^2$$
+\item Features may be defined by kernels
+\end{itemize}
+\end{frame}
+\begin{frame}{Least squares solutions: the optimization way}
+	\begin{itemize}
+		\item Convex, differentiable function of $W$ -- composition of convex, differentiable functions
+		\pause
+		\item Global minimum is the extremal point where derivative vanishes
+		\pause
+		\item $\nabla \dfrac{1}{m}\|X W - Y\|^2 = \dfrac{2}{m} X^T(XW - Y)$
+		\pause
+		\item $X^T X W = X^T Y$. Can also get this by differentiating before writing in matrix form
+		\pause
+		\item When is $X^T X = \sum_{i=1}^m \Phi(x_i) \Phi(x_i)^T$ invertible? When the training features span $\mathbb{R}^d$.  
+	\end{itemize}
+\end{frame}
+\begin{frame}{Least squares solutions: the linear algebraic way}
+	\begin{itemize}
+		\item Case 1: $d+1 = m$, $X$ is invertible. $W = X^{-1} Y$
+		\pause 
+	\item Case 2: $d+1 > m$, underdetermined/overparameterized. If $X$ has full row rank, then, min norm solution	$$ W = X^\top (X X^\top)^{-1} Y$$
+\pause
+	\item Case 3: $m > d+1$, overdetermined. If $X$ has full col rank, then, many solutions. Min norm solution $$ W = (X^\top X)^{-1} X^\top Y$$
+	\pause
+\item Can solve normal equations above directly, or use iterative methods for linear systems. Cost ${\cal O}(d^3)$ 
+\end{itemize}
+\end{frame}
+\begin{frame}{Gauss Markov theorem}
+	\begin{itemize}
+		\item Take noisy $y_i = x_i^\top W  + \epsilon_i,$ with $E\epsilo_i = 0$ and ${\rm Var}(\epsilon_i) = \sigma^2$; $x_i$ is non-random.
+		\pause
+		\item Statement: the OLS estimator is the best linear unbiased estimator (blue). It has the lowest variance.
+		\pause
+	\item Proof: consider another linear estimator $W' = C Y,$ for some $(d+1)\times n$ matrix $C =  (X^\top X)^{-1} X^\top + D$. 
+	\pause 
+	\item For $W'$ to be unbiased, show $DX = 0$. Then show, ${\rm Var}(W') = {\rm Var}(W) + \sigma^2 DD^\top.$
+	\pause
+	\item Since $DD^\top$ is positive semi-definite, qed.
+	\end{itemize}
+\end{frame}
+\begin{frame}{Ridge regression}
+	\begin{itemize}
+		\item Motivation: unbiased estimation does not mean least mean-squared error
+		\pause
+	\item Let true $h_W \in \mathcal{H}.$ Mean-squared error of statistical estimator of $W,$ $\hat{W},$ is its variance + bias-squared
+		$$E[(\hat{W}_i - W_i)^2) = {\rm Var}(\hat{W}_i) + (E[\hat{W}_i] - W_i)^2.$$
+		\item 
+	$$ {\rm arg min}_{W} \dfrac{1}{m} \|X W - Y\|^2 + \lambda \|W\|^2.$$
+		\pause
+	\item penalizes $l^2$ norm of $W$. Still convex problem.
+	\pause 
+	\item to derive OLS, also can take derivative and set it to zero. Similarly here.
+	\pause
+\item Equivalent formulation:
+	$ {\rm min}_w \sum_{i=1}^m (w^\top \Phi(x_i) - y_i)^2$ subject to $\|w\|^2 \leq \Lambda^2$
+	\end{itemize}
+\end{frame}
+\begin{frame}{Ridge regression solution and interpretation}
+	\begin{itemize}
+		\item Revisit convex optimization. Derive solution using KKT conditions.
+		\pause
+		\item Now simply use convexity and differentiability to obtain global minimum:
+			$$W = (X^\top X + \lambda I)^{-1} X^\top Y.$$ 
+		\pause
+		\item LASSO: with $l^1$ regularization.
+		\pause
+		\item Generalization bounds for bounded regression problems.
+		\pause 
+	\item Shrinkage by $l^2$ regularization.
+	\end{itemize}
+
+\end{frame}
+\end{document}
