@@ -45,46 +45,20 @@
 %----------------------------------------------------------------------------------------
 %	OBJECTIVES
 %----------------------------------------------------------------------------------------
-
+\begin{frame}{Quick notes}
+\begin{itemize}
+	\item Review session tonight 7:30-9:30pm on Zoom. See Piazza/Canvas for details.
+	\item Homework 1 will be out soon. Due on 9/13/2023.
+\end{itemize}
+\end{frame}
 \begin{frame}{Last time}
 \begin{itemize}
-	\item  Goal in this class: understand the foundations (``why''s and ``how''s) of ML
-	\pause
-	\item Supervised, unsupervised, self-supervised, semi-supervised overview
-	\pause 
 	\item Empirical risk minimization, finite hypothesis classes
 	\pause 
 	\item Overfitting, inductive bias, Intro to PAC learning
-\end{itemize}
-\end{frame}
-\begin{frame}{Supervised learning framework}
-	\begin{itemize}
-		\item Distribution $\mathcal{D}$ over the joint distribution of random variables $Z = (X, Y)$, where $X$ is an input and $Y$ is a label/output.
-		\pause
-	\item Labeled training data, $S = \{z_i = (x_i, y_i)\}, 1\leq i \leq m.$ Generally iid from $\mathcal{D}^m.$
-		\pause
-		\item Learner's output: predicted function or hypothesis, a transformation $h$ from $X$ to $Y$.
-		\pause
-	\item Loss function, measure of risk:  $\ell(z, h) \in \mathbb{R}$. e.g., $\ell(z, h) =  \mathbbm{1}_{h(x) \neq y}.$ (classification)
-	\pause
-	\item Generalization error or risk: 
-		$$R(h) = E_{z\sim \mathcal{D}} \ell(z, h)$$
-	\end{itemize}
-\end{frame}
-\begin{frame}{Empirical Risk Minimization}
-	\begin{itemize}
-		\item Take classifier $h$, $R(h) = \mathcal{D}(\{z: h(x) \neq y\}).$
-		\pause
-		\item When you have finite amount of data, empirical risk or training loss
-		$$ \hat{R}_S(h) = \dfrac{1}{m} \sum_{z \in S} \ell(z) = \dfrac{|\{z \in S: h(x) \neq y\}|}{m}.$$
-		\pause
-	\item ERM: find $h$ that minimizes $\hat{R}_S(h).$
-	\pause
-	\item Theory of supervised learning suggests that ERM leads to small generalization error with high probability
-	\pause
-	\item Now we will prove this result formally. 
-	\pause
-\item After that: Linear models.
+	\pause 
+\item Let ERM rule $$h_S := {\rm argmin}_{h\in \mathcal{H}} \hat{R}_S(h),$$ where empirical error, $$\hat{R}_S(h) := \dfrac{1}{m} \sum_{z \in S}\ell(z,h).$$ Let the realizability assumption be satisfied $\implies$ ERM rule $h_S$ has zero empirical error. Then, with probability at least $1-\delta$, the generalization error, 
+	$$R(h_S) := E_{z\in \mathcal{D}} \ell(z, h_S) \leq \dfrac{1}{m} \log\dfrac{|\mathcal{H}|}{\delta}.$$
 \end{itemize}
 \end{frame}
 \begin{frame}{Linear models}
@@ -99,7 +73,7 @@
 	\pause
 	\item $${\rm arg min}_{w, b} \dfrac{1}{m} (w^\top \Phi(x_i) + b - y_i)^2$$
 	\pause 
-\item Equivalently, where $X$ is $m\times (d+1)$ matrix with rows $X_i = (\Phi(x_i)^\top, 1)$, $W = [w_1, \cdots, w_d, 1]^\top$, $Y = [y_1, \cdots, y_m]^\top$,
+\item Equivalently, where $X$ is $m\times (d+1)$ matrix with rows $X_i = (\Phi(x_i)^\top, 1)$, $W = [w_1, \cdots, w_d, b]^\top$, $Y = [y_1, \cdots, y_m]^\top$,
 	\pause
 	$$ {\rm arg min}_{W} \dfrac{1}{m} \|X W - Y\|^2$$
 \item Features may be defined by kernels
@@ -131,7 +105,7 @@
 \end{frame}
 \begin{frame}{Gauss Markov theorem}
 	\begin{itemize}
-		\item Take noisy $y_i = x_i^\top W  + \epsilon_i,$ with $E\epsilo_i = 0$ and ${\rm Var}(\epsilon_i) = \sigma^2$; $x_i$ is non-random.
+		\item Take noisy $y_i = x_i^\top W  + \epsilon_i,$ with $E\epsilon_i = 0$ and ${\rm Var}(\epsilon_i) = \sigma^2$; $x_i$ is non-random.
 		\pause
 		\item Statement: the OLS estimator is the best linear unbiased estimator (blue). It has the lowest variance.
 		\pause
