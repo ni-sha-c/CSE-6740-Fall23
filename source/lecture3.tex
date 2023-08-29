@@ -20,7 +20,7 @@
     linkcolor=blue,
     filecolor=magenta,      
     urlcolor=magenta,
-    pdftitle={CSE6740-Lecture 2},
+    pdftitle={CSE6740-Lecture 3},
     pdfauthor={Nisha Chandramoorthy},
     pdflang={en-US}
 }
@@ -73,59 +73,59 @@
 	\pause
 	\item $${\rm arg min}_{w, b} \dfrac{1}{m} (w^\top \Phi(x_i) + b - y_i)^2$$
 	\pause 
-\item Equivalently, where $X$ is $m\times (d+1)$ matrix with rows $X_i = (\Phi(x_i)^\top, 1)$, $W = [w_1, \cdots, w_d, b]^\top$, $Y = [y_1, \cdots, y_m]^\top$,
+\item Equivalently, where $X$ is $m\times (d+1)$ matrix with rows $x_i = (\Phi(x_i)^\top, 1)$ (abuse of notation), $w = [w_1, \cdots, w_d, b]^\top$, $Y = [y_1, \cdots, y_m]^\top$,
 	\pause
-	$$ {\rm arg min}_{W} \dfrac{1}{m} \|X W - Y\|^2$$
+	$$ {\rm arg min}_{w} \dfrac{1}{m} \|X w - Y\|^2$$
 \item Features may be defined by kernels
 \end{itemize}
 \end{frame}
 \begin{frame}{Least squares solutions: the optimization way}
 	\begin{itemize}
-		\item Convex, differentiable function of $W$ -- composition of convex, differentiable functions
+		\item Convex, differentiable function of $w$ -- composition of convex, differentiable functions
 		\pause
 		\item Global minimum is the extremal point where derivative vanishes
 		\pause
-		\item $\nabla \dfrac{1}{m}\|X W - Y\|^2 = \dfrac{2}{m} X^T(XW - Y)$
+		\item $\nabla \dfrac{1}{m}\|X w - Y\|^2 = \dfrac{2}{m} X^T(Xw - Y)$
 		\pause
-		\item $X^T X W = X^T Y$. Can also get this by differentiating before writing in matrix form
+		\item $X^T X w = X^T Y$. 
 		\pause
 		\item When is $X^T X = \sum_{i=1}^m \Phi(x_i) \Phi(x_i)^T$ invertible? When the training features span $\mathbb{R}^d$.  
 	\end{itemize}
 \end{frame}
 \begin{frame}{Least squares solutions: the linear algebraic way}
 	\begin{itemize}
-		\item Case 1: $d+1 = m$, $X$ is invertible. $W = X^{-1} Y$
+		\item Case 1: $d+1 = m$, $X$ is invertible. $w = X^{-1} Y$
 		\pause 
-	\item Case 2: $d+1 > m$, underdetermined/overparameterized. If $X$ has full row rank, then, min norm solution	$$ W = X^\top (X X^\top)^{-1} Y$$
+	\item Case 2: $d+1 > m$, underdetermined/overparameterized. If $X$ has full row rank, then, min norm solution	$$ w = X^\top (X X^\top)^{-1} Y$$
 \pause
-	\item Case 3: $m > d+1$, overdetermined. If $X$ has full col rank, then, many solutions. Min norm solution $$ W = (X^\top X)^{-1} X^\top Y$$
+	\item Case 3: $m > d+1$, overdetermined. If $X$ has full col rank, then, many solutions. Min norm solution $$w = (X^\top X)^{-1} X^\top Y$$
 	\pause
 \item Can solve normal equations above directly, or use iterative methods for linear systems. Cost ${\cal O}(d^3)$ 
 \end{itemize}
 \end{frame}
 \begin{frame}{Gauss Markov theorem}
 	\begin{itemize}
-		\item Take noisy $y_i = x_i^\top W  + \epsilon_i,$ with $E\epsilon_i = 0$ and ${\rm Var}(\epsilon_i) = \sigma^2$; $x_i$ is non-random.
+		\item Take noisy $y_i = x_i^\top w  + \epsilon_i,$ with $E\epsilon_i = 0$ and ${\rm Var}(\epsilon_i) = \sigma^2$; $x_i$ is non-random.
 		\pause
 		\item Statement: the OLS estimator is the best linear unbiased estimator (blue). It has the lowest variance.
 		\pause
-	\item Proof: consider another linear estimator $W' = C Y,$ for some $(d+1)\times n$ matrix $C =  (X^\top X)^{-1} X^\top + D$. 
+	\item Proof: consider another linear estimator $w' = C Y,$ for some $(d+1)\times n$ matrix $C =  (X^\top X)^{-1} X^\top + D$. 
 	\pause 
-	\item For $W'$ to be unbiased, show $DX = 0$. Then show, ${\rm Var}(W') = {\rm Var}(W) + \sigma^2 DD^\top.$
+	\item For $w'$ to be unbiased, show $DX = 0$. Then show, ${\rm Var}(w') = {\rm Var}(w) + \sigma^2 DD^\top.$
 	\pause
 	\item Since $DD^\top$ is positive semi-definite, qed.
 	\end{itemize}
 \end{frame}
-\begin{frame}{Ridge regression}
+\begin{frame}{Bias-variance decomposition}
 	\begin{itemize}
 		\item Motivation: unbiased estimation does not mean least mean-squared error
 		\pause
-	\item Let true $h_W \in \mathcal{H}.$ Mean-squared error of statistical estimator of $W,$ $\hat{W},$ is its variance + bias-squared
-		$$E[(\hat{W}_i - W_i)^2) = {\rm Var}(\hat{W}_i) + (E[\hat{W}_i] - W_i)^2.$$
+	\item Let true $h_w \in \mathcal{H}.$ Mean-squared error of statistical estimator of $w,$ $\hat{w},$ is its variance + bias-squared
+		$$E[(\hat{w}_i - w_i)^2) = {\rm Var}(\hat{w}_i) + (E[\hat{w}_i] - w_i)^2.$$
 		\item 
-	$$ {\rm arg min}_{W} \dfrac{1}{m} \|X W - Y\|^2 + \lambda \|W\|^2.$$
+	$$ {\rm arg min}_{w} \dfrac{1}{m} \|X w - Y\|^2 + \lambda \|w\|^2.$$
 		\pause
-	\item penalizes $l^2$ norm of $W$. Still convex problem.
+	\item penalizes $l^2$ norm of $w$. Still convex problem.
 	\pause 
 	\item to derive OLS, also can take derivative and set it to zero. Similarly here.
 	\pause
@@ -138,7 +138,7 @@
 		\item Revisit convex optimization. Derive solution using KKT conditions.
 		\pause
 		\item Now simply use convexity and differentiability to obtain global minimum:
-			$$W = (X^\top X + \lambda I)^{-1} X^\top Y.$$ 
+			$$w = (X^\top X + \lambda I)^{-1} X^\top Y.$$ 
 		\pause
 		\item LASSO: with $l^1$ regularization.
 		\pause
