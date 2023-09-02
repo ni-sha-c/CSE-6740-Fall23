@@ -94,11 +94,11 @@ where $\lambda > 0$ is a regularization parameter. Here, we develop a stochastic
 \begin{itemize}
 	\item[(a)] Write $w = w^+ - w^-$, where $w^+, w^- \geq 0$ are the positive and negative parts of $w$ respectively. That is, when the $j$th component, $w_j,$ of $w,$ is less than 0, $w^+_j = 0$ and $w^-_j = -w_j.$ Similarly, when $w_j > 0,$ $w^+_j = w_j$ and $w^-_j = 0.$ Find a quadratic function, $Q,$ of $w^+$ and $w^-$ such that
 	\begin{equation}
-		{\rm min}_{w^+, w^- \geq 0} \lambda \sum_{j=1}^m Q(w^+, w^-)
+		{\rm min}_{w^+, w^- \geq 0} \sum_{j=1}^m Q(w^+, w^-)
 	\end{equation}
 	is equivalent to the above LASSO problem in \eqref{eq:lasso-opt}. Explain the equivalence. [10 pts]
 \item[(b)] [Mohri et al Ex. 11.10] Derive a stochastic gradient descent algorithm for the quadratic program (with affine constraints) in part (a). [10 pts] 
-\item[(c)] Suppose $X = [x_1, \cdots, x_m]^\top$ is orthonormal and there exists a solution $w$ for $Xw = Y,$ where $Y = [y_1,\cdots, y_m]^\top$ with no more than $k$ non-zero elements. Can the SGD algorithm get arbitrarily close to $w$? Explain why or why not. [10 pts]    
+\item[(c)] Suppose $X = [x_1, \cdots, x_m]^\top$ is orthonormal and there exists a solution $w$ for $Xw = Y,$ where $Y = [y_1,\cdots, y_m]^\top$ with $w$ having no more than $k$ non-zero elements. Can the SGD algorithm get arbitrarily close to $w$? Explain why or why not. [10 pts]    
 \end{itemize}
 
 \section{Logistic Regression} 
