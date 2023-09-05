@@ -1,0 +1,78 @@
+\documentclass[final]{beamer}
+\usepackage{eulervm,verbatim}          
+\usepackage[scaled]{helvet}
+\usepackage[most]{tcolorbox}
+\setbeamercolor{frametitle}{fg=black,bg=white} % Colors of the block titles
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+\definecolor{darkcerulean}{rgb}{0.03, 0.27, 0.49}
+\newcommand{\citesmall}[1]{[{\color{darkcerulean}\begin{small} \textbf{#1} \end{small}}]}
+\setbeamertemplate{footline}[frame number]
+\DeclareMathOperator*{\argmin}{arg\,min}
+\usepackage{graphicx}  % Required for including images
+\usepackage{bbm}
+\usepackage{booktabs} % Top and bottom rules for tables
+\definecolor{burgundy}{rgb}{0.5, 0.0, 0.13}
+\newcommand{\highlight}[1]{{\color{burgundy} \textbf{#1}}}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=magenta,
+    pdftitle={CSE6740-Lecture 5},
+    pdfauthor={Nisha Chandramoorthy},
+    pdflang={en-US}
+}
+
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION 
+%----------------------------------------------------------------------------------------
+\title{\begin{huge}{CSE 6740 A/ISyE 6740: Computational Data Analysis: Introductory lecture}\end{huge}} % Poster title
+
+
+\author{Nisha Chandramoorthy} % Author(s)
+
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\frame{\titlepage}
+
+%----------------------------------------------------------------------------------------
+%	OBJECTIVES
+%----------------------------------------------------------------------------------------
+\begin{frame}{Last time}
+\begin{itemize}
+	\item Recap of shrinkage by ridge regression
+	\pause
+	\item Geometric view of compression by LASSO
+	\pause
+	\item Generalization of LASSO 
+	\pause 
+	\item $\ell^0$ regularization and compressed sensing
+\end{itemize}
+\end{frame}
+\begin{frame}{Today}
+	\begin{itemize}
+	\item Classification ERM
+	\pause
+	\item Logistic regression, Bayesian view
+	\pause
+	\item Perceptron algorithm and convergence proof
+	\pause
+	\item Support vector regression or maximum margin classification
+	\pause 
+	\item Convex optimization
+	\pause 
+	\item Bias-complexity tradeoff 
+	\end{itemize}
+\end{frame}
+\begin{frame}{}
+
+\end{frame}
+
+\end{document}
