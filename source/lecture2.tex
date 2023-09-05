@@ -124,7 +124,7 @@
 		\pause 
 	\item Case 2: $d+1 > m$, underdetermined/overparameterized. If $X$ has full row rank, then, min norm solution	$$ W = X^\top (X X^\top)^{-1} Y$$
 \pause
-	\item Case 3: $m > d+1$, overdetermined. If $X$ has full col rank, then, many solutions. Min norm solution $$ W = (X^\top X)^{-1} X^\top Y$$
+	\item Case 3: $m > d+1$, overdetermined. If $X$ does *not* have full col rank, then, many solutions. When $X$ has full col rank, then, least squares solution: $$ W = (X^\top X)^{-1} X^\top Y$$
 	\pause
 \item Can solve normal equations above directly, or use iterative methods for linear systems. Cost ${\cal O}(d^3)$ 
 \end{itemize}
