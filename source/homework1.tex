@@ -172,10 +172,10 @@ We want to fit each element of $U$ and $V$ by minimizing squared
 reconstruction error over all training data points. That is, the
 objective function we minimize is given by
 \begin{equation}
-E(U,V) = \sum_{u=1}^n\sum_{i=1}^m (M_{u,i} - U_u V_i^\top)^2 = \sum_{u =1}^n\sum_{i=1}^m  (M_{u,i} - \sum_{k=1}^d U_{u,k} V_{i,k})^2 \label{eq:svd}
+E(U,V) = \sum_{u}\sum_{i} (M_{u,i} - U_u V_i^\top)^2 = \sum_{u}\sum_{i}  (M_{u,i} - \sum_{k=1}^d U_{u,k} V_{i,k})^2 \label{eq:svd}
 \end{equation}
 where $U_u$ is the $u$th row of $U$ and $V_i$ is the $i$th row of
-$V$. We observe that this looks very similar to the linear
+$V$; the summation is over indices $1\leq u\leq n$ and $1\leq i\leq m$ such that $M_{u,i}\neq 0$. We observe that this looks very similar to the linear
 regression. Recall that we minimize in linear regression:
 \begin{equation}
 E(w) = \sum_{i=1}^m (y_i - w^\top x_i)^2 = \sum_{i=1}^m (y_i
