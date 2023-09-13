@@ -1,6 +1,5 @@
 # implement support vector classifier
-# Modified from https://github.com/kazuto1011
-
+# Modified from https://github.com/kazuto1011/svm-pytorch/blob/master/main.py (Kazuto Nakashima) MIT License
 
 
 import argparse
