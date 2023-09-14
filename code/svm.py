@@ -82,8 +82,6 @@ def visualize(X, Y, model):
     x2_c2 = x2_data[np.where(y_data == -1)]
 
     plt.figure(figsize=(10, 10))
-    plt.xlim([x1_data.min() + delta, x1_data.max() - delta])
-    plt.ylim([x2_data.min() + delta, x2_data.max() - delta])
     plt.plot(x1_c1, x2_c1, "P", c="b", ms=10)
     plt.plot(x1_c2, x2_c2, "o", c="r", ms=10)
     plt.plot(x1, x2, "k", lw=3)
@@ -98,7 +96,7 @@ if __name__ == "__main__":
     parser.add_argument("--c", type=float, default=0.01)
     parser.add_argument("--lr", type=float, default=0.1)
     parser.add_argument("--batchsize", type=int, default=5)
-    parser.add_argument("--epoch", type=int, default=10)
+    parser.add_argument("--epoch", type=int, default=100)
     parser.add_argument("--device", default="cuda", choices=["cpu", "cuda"])
     args = parser.parse_args()
     args.device = torch.device(args.device if torch.cuda.is_available() else "cpu")
