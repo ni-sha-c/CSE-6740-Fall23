@@ -30,5 +30,13 @@ $minimize {\frac{1}{m} \Vert{XW - Y}\Vert + \lambda\Vert{W}\Vert^2}$
 #### We ideally want to solve for $\ell_0$ i.e. best subset selection. However, $\ell_1$ (lasso) is much easier to solve since it is amenable to linear programming methods. Crucial result by [Candes and Tao 2004]: we can get very close to an optimal $\ell_0$ solution by solving the $\ell_1$ problem instead. Result valid given some assumptions on the data.
 #### For the ERM upper bounds in case of Ridge and LASSO regression, $r^2$ term in Ridge will grow linearly with $d^2$, which is much faster than $\log(d)$ in LASSO. Hence, upper bound for Ridge is looser compared to LASSO as $d$ grows.
 
+## 09/14/2023 -- Lecture 8
+
+#### Recap of soft SVM
+#### Hinge loss, Quadratic Hinge loss, Ramp loss
+#### Deriving SVM formulations from ERM generalization bound
+#### Definition and intuition for Rademacher complexity; upper bound for Rademacher complexity of a bounded, linear hypothesis class for empirical hinge loss
+#### Tradeoff between Rademacher complexity and hinge loss
+#### Walkthrough of the SVM code and brief intro to Pytorch
 
 
