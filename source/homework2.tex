@@ -22,7 +22,7 @@
 %\Scribe{Your Name}
 \title{Homework 1_6740}
 \LectureNumber{CSE 6740}
-\LectureDate{Due Sept 14, '23 (11:59 pm ET) on Gradescope} 
+\LectureDate{Due Oct 1st, '23 (11:59 pm ET) on Gradescope} 
 \Lecturer{Cite any sources and collaborators; do not copy. See syllabus for policy.}
 \LectureTitle{Homework 1}
 
@@ -50,10 +50,44 @@ The breast cancer dataset is not linearly separable. However, a linear classifie
 	y = data.target
 	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 	\end{lstlisting}
-	\item[(a)] Since the data are not linearly separable, we do not expect the algorithm to converge. How do you identify a good stopping criterion . (2 pts)
+	\item[(a)] Since the data are not linearly separable, we do not expect the algorithm to converge. Describe how you choose your stopping criterion. (5 pts)
+	\item[(b)] Once you have implemented your algorithm, you may check your accuracy against a standard implementation such as \href{https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Perceptron.html}{sklearn's Perceptron function}. In particular, check your implementation's accuracy against the classification accuracy (0-1 loss) of sklearn's implementation on the same test data (from above). Explain any hyperparameter choices you make in calling sklearn's Perceptron, and whether causes a discrepancy in the accuracy. (15 pts)
+	\item[(c)] [Exercise 15.2 from the textbook]: 
+		Consider the data $X = [x_1,\cdots, x_m]^\top,$ where $x_i \sim \mathcal{D}$ were iid. For this part alone, assume that, with probability 1, the data were linearly separable with margin $\rho$ and that $\|x\|\leq R$. Prove that the Perceptron converges in at most $(R/\rho)^2$ steps. (10 pts)
+	
+		Now, we shall implement AdaBoost with your Perceptron code from part (b) as the weak learner. 
+	\item[(d)] Give your reasoning for how you would now choose the size of the training dataset for the weak learner. Recall that a weak learner should have an error $< 1/2 - \gamma$, with $\gamma > 0$. Derive a bound for $\gamma$ in terms of the sample size such that the probability of the weak learner making an error of $1/2 - \gamma$ is $> 1- \delta,$ for some $\delta > 0.$ (10 pts)
+	\item[(e)] Implement your AdaBoost algorithm. Plot the accuracy (training and test) as a function of number of iterations (5 pts). Plot the confidence margin of your predictions vs number of iterations (5 pts).
+	\item[(f)] Let $f_t$ be your Perceptron output at iteration $t$ and $D_{t+1}$ be the updated distribution of the training points. Sample uniformly from $D_{t+1}$ in your code and plot the percentage of points misclassified by $f_t, f_{t-1}$. Analytically derive what this should be. (15 pts) [Extension of 10.3 from the book]
+	\item[(g)] Describe your stopping criterion for AdaBoost (2 pts).
+	\item[(h)] Explain your plots in part (e) using the results discussed in class about the effect of Boosting on i) the generalization error and ii) margin.  (10 pts)
+
 
 \end{itemize}
 
+\section{Support Vectors}
+
+The algorithm that \href{https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic}{works best} (in terms of test accuracy) for our dataset is a form of Gradient Boosted Decision Tree. Not having done this before, we are at the mercy of linear classifiers, although we know a simple linear combination of the complicated cell features may not tell us if the cell is cancerous. For this problem, logistic regression and SVMs seem to be good performers, although we need to consider nonlinear features -- \emph{kernel}-ize. Not having done this either, we tried Boosting a linear classifier in the previous problem and ended up with a nonlinear classifier that (hopefully) does better.
+But, even with nonlinear decision boundaries, there might be points with low confidence, i.e, $y h(x)$ close to 0. With our dataset, especially, a low confidence prediction can be grave, and hence it is common in medical applications for a classifier to return a ``reject'' or no prediction for a given data (See Ripley 1996, Herbei and Wegkamp 2006, Bartlett and Wegkamp 2008 etc). 
+
+
+Recall the true risk/error, when only considering misclassification: $\mathbb{P}(Y h(X) < 0)$. In practice, suppose we define the loss function to be, 
+\begin{equation}
+	\ell(z, h) = \begin{cases}
+		1 &  y h(x) < -\rho \\
+		2c &  y h(x) \in (-\rho, 0) \\
+		c & y h(x) \in [0, \rho) \\
+		0 & \text{otherwise},
+	\end{cases}
+\end{equation}
+where $2c$ is the cost of misclassification with low confidence ($<\rho$) and $c < 1$ is the cost of classification with low confidence. 
+\begin{itemize}
+\item[(a)] Let the class conditional density $\eta(x) = \mathbb{P}(Y = 1|X = x).$ Derive    
+
+Since giving no prediction could also be costly, we will modify this true risk to be $\mathbb{P}(Y h(X) \leq \rho) + c \mathbb{P}(|Y h(X)| \leq \rho),$ where $c$
+Ideally, if the distribution $\mathcal{D}$ is known, oris known, we will return 
+
+\end{itemize}
 
 
 \end{document}
