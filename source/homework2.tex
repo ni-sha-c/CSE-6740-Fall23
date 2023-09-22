@@ -8,19 +8,20 @@
 \usepackage{listings}
 \usepackage{natbib,verbatim}
 \usepackage{amsmath,amssymb,amsfonts,mathtools}
+\usepackage{bbm}
 \usepackage{hyperref}
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
     filecolor=magenta,      
     urlcolor=magenta,
-    pdftitle={Course Syllabus},
+    pdftitle={Homework 2},
     pdfauthor={Nisha Chandramoorthy},
     pdflang={en-US}
 }
 
 %\Scribe{Your Name}
-\title{Homework 1_6740}
+\title{Homework 2_6740}
 \LectureNumber{CSE 6740}
 \LectureDate{Due Oct 1st, '23 (11:59 pm ET) on Gradescope} 
 \Lecturer{Cite any sources and collaborators; do not copy. See syllabus for policy.}
@@ -53,12 +54,12 @@ The breast cancer dataset is not linearly separable. However, a linear classifie
 	\item[(a)] Since the data are not linearly separable, we do not expect the algorithm to converge. Describe how you choose your stopping criterion. (5 pts)
 	\item[(b)] Once you have implemented your algorithm, you may check your accuracy against a standard implementation such as \href{https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Perceptron.html}{sklearn's Perceptron function}. In particular, check your implementation's accuracy against the classification accuracy (0-1 loss) of sklearn's implementation on the same test data (from above). Explain any hyperparameter choices you make in calling sklearn's Perceptron, and whether causes a discrepancy in the accuracy. (15 pts)
 	\item[(c)] [Exercise 15.2 from the textbook]: 
-		Consider the data $X = [x_1,\cdots, x_m]^\top,$ where $x_i \sim \mathcal{D}$ were iid. For this part alone, assume that, with probability 1, the data were linearly separable with margin $\rho$ and that $\|x\|\leq R$. Prove that the Perceptron converges in at most $(R/\rho)^2$ steps. (10 pts)
+		Consider the data $X = [x_1,\cdots, x_m]^\top,$ where $x_i \sim \mathcal{D}$ were iid. For this part alone, assume that, with probability 1, the data are linearly separable with margin $\rho$ and that $\|x\|\leq R$. Prove that the Perceptron converges in at most $(R/\rho)^2$ steps. (10 pts)
 	
 		Now, we shall implement AdaBoost with your Perceptron code from part (b) as the weak learner. 
 	\item[(d)] Give your reasoning for how you would now choose the size of the training dataset for the weak learner. Recall that a weak learner should have an error $< 1/2 - \gamma$, with $\gamma > 0$. Derive a bound for $\gamma$ in terms of the sample size such that the probability of the weak learner making an error of $1/2 - \gamma$ is $> 1- \delta,$ for some $\delta > 0.$ (10 pts)
-	\item[(e)] Implement your AdaBoost algorithm. Plot the accuracy (training and test) as a function of number of iterations (5 pts). Plot the confidence margin of your predictions vs number of iterations (5 pts).
-	\item[(f)] Let $f_t$ be your Perceptron output at iteration $t$ and $D_{t+1}$ be the updated distribution of the training points. Sample uniformly from $D_{t+1}$ in your code and plot the percentage of points misclassified by $f_t, f_{t-1}$. Analytically derive what this should be. (15 pts) [Extension of 10.3 from the book]
+	\item[(e)] Implement your AdaBoost algorithm. Plot the accuracy (training and test) as a function of number of iterations (5 pts). Plot the confidence margin of your predictions vs number of iterations (5 pts). You do not need to submit your code.
+	\item[(f)] Let $f_t$ be your Perceptron output at iteration $t$ and $D_{t+1}$ be the updated distribution of the training points. Sample uniformly from $D_{t+1}$ in your code and plot the percentage of points misclassified by $f_t, f_{t-1}$ at each $t$. Analytically derive what this should be. (15 pts) [Extension of 10.3 from the book]
 	\item[(g)] Describe your stopping criterion for AdaBoost (2 pts).
 	\item[(h)] Explain your plots in part (e) using the results discussed in class about the effect of Boosting on i) the generalization error and ii) margin.  (10 pts)
 
@@ -67,27 +68,79 @@ The breast cancer dataset is not linearly separable. However, a linear classifie
 
 \section{Support Vectors}
 
-The algorithm that \href{https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic}{works best} (in terms of test accuracy) for our dataset is a form of Gradient Boosted Decision Tree. Not having done this before, we are at the mercy of linear classifiers, although we know a simple linear combination of the complicated cell features may not tell us if the cell is cancerous. For this problem, logistic regression and SVMs seem to be good performers, although we need to consider nonlinear features -- \emph{kernel}-ize. Not having done this either, we tried Boosting a linear classifier in the previous problem and ended up with a nonlinear classifier that (hopefully) does better.
-But, even with nonlinear decision boundaries, there might be points with low confidence, i.e, $y h(x)$ close to 0. With our dataset, especially, a low confidence prediction can be grave, and hence it is common in medical applications for a classifier to return a ``reject'' or no prediction for a given data (See Ripley 1996, Herbei and Wegkamp 2006, Bartlett and Wegkamp 2008 etc). 
+The algorithm that \href{https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic}{works best} (in terms of test accuracy) for our dataset is a form of Gradient Boosted Decision Tree. Not having done this before, we are at the mercy of linear classifiers, although we know a simple linear combination of the complicated cell features may not tell us if the cell is cancerous. For this problem, logistic regression and SVMs seem to be good performers, but we need to \emph{kernel}-ize these algorithms. Since we have not done kernel methods yet, we tried Boosting a linear classifier in the previous problem and ended up with a nonlinear classifier that (hopefully) does better.
+But, even with nonlinear decision boundaries, there might be points with low confidence, i.e, $y h(x)$ close to 0. With our dataset especially, a low confidence prediction can be grave, as misclassification is likely. Hence, it is common in medical applications for a classifier to return a ``reject'' or no prediction (the value 0) for a given data (See Ripley 1996, Herbei and Wegkamp 2006, Bartlett and Wegkamp 2008, Grandvalet et al 2008, Fumera and Roli 2002 etc). 
+
+Our classifier will return the option 0 (reject) whenever $|yh(x)| \leq \rho.$ Recall the true risk/error, when considering the loss associated with a misclassification to be 1: $\mathbb{P}(Y h(X) < 0)$.  
 
 
-Recall the true risk/error, when only considering misclassification: $\mathbb{P}(Y h(X) < 0)$. In practice, suppose we define the loss function to be, 
-\begin{equation}
-	\ell(z, h) = \begin{cases}
-		1 &  y h(x) < -\rho \\
-		2c &  y h(x) \in (-\rho, 0) \\
-		c & y h(x) \in [0, \rho) \\
-		0 & \text{otherwise},
-	\end{cases}
-\end{equation}
-where $2c$ is the cost of misclassification with low confidence ($<\rho$) and $c < 1$ is the cost of classification with low confidence. 
 \begin{itemize}
-\item[(a)] Let the class conditional density $\eta(x) = \mathbb{P}(Y = 1|X = x).$ Derive    
+	\item[(a)] Let the class conditional density $\eta(x) = \mathbb{P}(Y = 1|X = x).$ Suppose the loss value associated with returning the reject option, 0, is $c < 1/2.$ As with the 0-1 loss, the cost of misclassifcation, with confidence, $y h(x) < -\rho,$ is 1. Derive an expression for the generalization error or Bayes risk, $R(h)$.   (5 pts)
 
-Since giving no prediction could also be costly, we will modify this true risk to be $\mathbb{P}(Y h(X) \leq \rho) + c \mathbb{P}(|Y h(X)| \leq \rho),$ where $c$
-Ideally, if the distribution $\mathcal{D}$ is known, oris known, we will return 
+	\item[(b)] The minimizer $h^*$ of the generalization error is known to be form [Chow et al 1970]
+	\begin{equation}
+		h^*(x) = \begin{cases}
+			-1 & \eta(x) < \delta \\
+			0 & 	\delta \leq \eta(x) \leq 1-\delta \\
+			1 & \eta(x) > 1 -\delta.
+		\end{cases}
+	\end{equation}
+	Show that $\delta = c$ minimizes the risk from part (a) with minimum risk being $E_X {\rm min}\{\eta(X), 1- \eta(X), c\}.$ (10 pts)
+\item[(c)] Bartlett and Wegkamp 2008 define the following loss:
+	\begin{equation}
+		\label{eq:loss}
+		\ell(z, h) = \begin{cases}
+			1 - \dfrac{(1-c)yh(x)}{c} & yh(x) < 0 \\
+			1 - yh(x) & 0\leq yh(x) \leq 1 \\
+			0 & \text{otherwise}
+		\end{cases}.
+	\end{equation}
+Note that the above loss in \eqref{eq:loss} is greater than the discontinuous loss in part (a). When $d < 1/2 \leq \rho \leq 1-d$, they show that the excess risk with this loss for any $h$ upper bounds the excess risk with the loss in part (a). Write down an optimization problem for the ERM of this loss \eqref{eq:loss} using bounded, affine functions, i.e., $h_{w,b}(x) = w^\top x + b,$ $\|w\| \leq r.$ Show that this optimization is convex. (10 pts)
+\item[(d)] Derive the KKT conditions for the problem in part (c). (10 pts)
+\item[(e)] Implement the ERM algorithm for the problem in part (c). For this, you could start with modifying the loss function and the returned model in \verb+svm.py+ from class. Another option is to use a standard quadratic convex program solver. Here is an example code generated by ChatGPT -- modify it to plug in the objective function and constraints derived above.
+\begin{lstlisting}
+import cvxpy as cp
+import numpy as np
 
+# Define the variables and constants
+n = 3  # Number of variables
+m = 2  # Number of constraints
+
+# Define the quadratic objective function components
+Q = np.array([[2.0, 1.0, 0.0],
+              [1.0, 2.0, 1.0],
+              [0.0, 1.0, 2.0]])
+c = np.array([-2.0, -4.0, -6.0])
+
+# Define the inequality constraints (Ax <= b)
+A = np.array([[-1.0, 1.0, 0.0],
+              [1.0, 2.0, 3.0]])
+b = np.array([1.0, 2.0])
+
+# Define the decision variables
+x = cp.Variable(n)
+
+# Define the objective function
+objective = cp.Minimize(0.5 * cp.quad_form(x, Q) + c.T @ x)
+
+# Define the constraints
+constraints = [A @ x <= b]
+
+# Create the problem instance
+problem = cp.Problem(objective, constraints)
+
+# Solve the problem
+problem.solve()
+
+# Check if the problem is solved successfully
+if problem.status == cp.OPTIMAL:
+    # Print the optimal value and solution
+    print("Optimal value =", problem.value)
+    print("Optimal solution x =", x.value)
+else:
+    print("The problem did not converge to an optimal solution.")
+
+\end{lstlisting}
+You do not need to submit the code. Fine tune the choice of $\rho$ so that the test error (remember to modify this according to the loss \eqref{eq:loss}) is lower than your best test error in Problem 1. Take $c = 1/3.$ Describe how you chose $\rho$ and discuss the improvement in the test error [15 pts].
 \end{itemize}
-
-
 \end{document}
