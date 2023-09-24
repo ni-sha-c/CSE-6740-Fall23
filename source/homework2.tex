@@ -58,7 +58,7 @@ The breast cancer dataset is not linearly separable. However, a linear classifie
 	
 		Now, we shall implement AdaBoost with your Perceptron code from part (b) as the weak learner. 
 	\item[(d)] Give your reasoning for how you would now choose the size of the training dataset for the weak learner. Recall that a weak learner should have an error $< 1/2 - \gamma$, with $\gamma > 0$. Derive a bound for $\gamma$ in terms of the sample size such that the probability of the weak learner making an error of $1/2 - \gamma$ is $> 1- \delta,$ for some $\delta > 0.$ State any PAC learnability assumptions you make. (10 pts)
-	\item[(e)] Implement your AdaBoost algorithm. Plot the accuracy (training and test) as a function of number of iterations (5 pts). Plot the confidence margin of your predictions vs number of iterations (5 pts). You do not need to submit your code.
+	\item[(e)] Implement your AdaBoost algorithm. Plot the accuracy (training and test) as a function of number of iterations (5 pts). Plot the confidence margin, ${\rm min}_{x\in S} |h(x)|,$ of your predictions vs number of iterations (5 pts). You do not need to submit your code.
 	\item[(f)] Let $f_t$ be your Perceptron output at iteration $t$ and $D_{t+1}$ be the updated distribution of the training points. Sample uniformly from $D_{t+1}$ in your code and plot the percentage of points misclassified by $f_t, f_{t-1}$ at each $t$. Analytically derive what this should be. (15 pts) [Extension of 10.3 from the book]
 	\item[(g)] Describe your stopping criterion for AdaBoost (2 pts).
 	\item[(h)] Explain your plots in part (e) using the results discussed in class about the effect of Boosting on i) the generalization error and ii) margin.  (10 pts)
