@@ -1,0 +1,69 @@
+\documentclass[12pt]{article}
+\usepackage[tagged, highstructure]{accessibility}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{scribe}
+\usepackage{listings}
+\usepackage{natbib,verbatim}
+\usepackage{amsmath,amssymb,amsfonts,mathtools}
+\usepackage{bbm}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=magenta,
+    pdftitle={Homework 3},
+    pdfauthor={Nisha Chandramoorthy},
+    pdflang={en-US}
+}
+
+%\Scribe{Your Name}
+\title{Homework 3_6740}
+\LectureNumber{CSE 6740}
+\LectureDate{Due Oct 13th, '23 (11:59 pm ET) on Gradescope} 
+\Lecturer{Cite any sources and collaborators; do not copy. See syllabus for policy.}
+\LectureTitle{Homework 3: Kernel methods}
+
+\lstset{style=mystyle}
+
+\begin{document}
+\MakeScribeTop
+
+
+\section*{Textbook exercise 6.22 from Mohri et al; solved in class}
+
+The question with hints is given below. Some solutions are in the lecture notes. If you do learn the solution from the notes, please work out the solution on your own afterwards. Hints are given below as well.
+
+Let the input domain be $\mathcal{X}$.
+Consider a Hilbert space $\mathbb{H},$ a feature map $\Phi:\mathcal{X}\to\mathbb{H}$ and a kernel $k(x,x') = \langle \Phi(x), \Phi(x')\rangle,$ where $\langle \cdot, \cdot\rangle$ is the inner product on $\mathbb{H}.$
+\subsection*{Part 1: Minimum enclosing ball (MEB) problem (20 pts)}
+
+Consider the following optimization problem for finding the minimum enclosing ball (MEB) of a set of points $S = \{x_1,\ldots,x_m\}\subset\mathcal{X}$:
+\begin{equation}
+\min_{r>0,c\in\mathbb{H}} \quad r^2 \quad \text{subject to } \quad \|c-\Phi(x_i)\|^2\leq r^2, \quad i=1,\ldots,m.
+\end{equation}
+Show how to derive the dual optimization problem:
+\begin{equation}
+	\max_{\alpha\in\mathbb{R}^m} \quad \sum_{i=1}^m \alpha_i k(x_i, x_i) - \frac{1}{2}\sum_{i,j=1}^m \alpha_i\alpha_j k(x_i,x_j) \quad \text{subject to } \quad \alpha_i \geq 0 \;{\rm and}\; \sum_{i=1}^m \alpha_i = 1\quad i=1,\ldots,m.
+\end{equation}
+Prove that the optimal solution $c = \sum_{i=1}^m \alpha_i \Phi(x_i)$ is a convex combination of the features at the training points $x_1,\ldots,x_m.$ These features are analogous to the support vectors in SVMs.
+
+
+Hints: i) Make problem finite dimensional in $c$ using Kernel trick. Justify this step as done in class. ii) write down the KKT conditions for the primal problem. 
+
+
+\subsection*{Part 2: Anomaly detection hyothesis class (20 pts)}
+
+Consider the hypothesis class 
+
+\begin{equation}
+	\mathcal{H} = \left\{h_{c,r}(x) = r^2 - \|c-\Phi(x)\|^2:\|c\|\leq \Lambda, 0 < r \leq R\right\},
+\end{equation}
+where $\|\cdot\|$ is the norm induced by the inner product on $\mathbb{H},$ i.e., $\|c\| = \sqrt{\langle c,c\rangle}.$ A hypothesis $h_{c,r}$ is an anomaly detector that flags an input $x$ as an anomaly if $h_{c,r}(x) \leq 0.$
+Show that if $\sup_x \|\Phi(x)\| < M,$ then the solution to the MEB problem in Part 1 is in $\mathcal{H}$ with $\Lambda \leq M$ and $R \leq 2M.$
+
+Hint: show that the optimal solution for $r$ in Part 1 is $r \leq  .$
+\end{document}
