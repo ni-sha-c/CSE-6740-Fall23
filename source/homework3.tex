@@ -15,6 +15,7 @@
     linkcolor=blue,
     filecolor=magenta,      
     urlcolor=magenta,
+    citecolor=magenta,
     pdftitle={Homework 3},
     pdfauthor={Nisha Chandramoorthy},
     pdflang={en-US}
@@ -23,7 +24,7 @@
 %\Scribe{Your Name}
 \title{Homework 3_6740}
 \LectureNumber{CSE 6740}
-\LectureDate{Due Oct 13th, '23 (11:59 pm ET) on Gradescope} 
+\LectureDate{Due Oct 14th, '23 (11:59 pm ET) on Gradescope} 
 \Lecturer{Cite any sources and collaborators; do not copy. See syllabus for policy.}
 \LectureTitle{Homework 3: Kernel methods}
 
@@ -33,9 +34,9 @@
 \MakeScribeTop
 
 
-\section*{Textbook exercise 6.22 from Mohri et al; solved in class}
+\section*{Textbook exercise 6.22 from Mohri et al;  Parts 1 and 2 solved in class}
 
-The question with hints is given below. Some solutions are in the lecture notes. If you do learn the solution from the notes, please work out the solution on your own afterwards. Hints are given below as well.
+The question with hints is given below. Some solutions are in the lecture notes, but please submit the solutions you have reworked on your own. Hints are given below as well.
 
 Let the input domain be $\mathcal{X}$.
 Consider a Hilbert space $\mathbb{H},$ a feature map $\Phi:\mathcal{X}\to\mathbb{H}$ and a kernel $k(x,x') = \langle \Phi(x), \Phi(x')\rangle,$ where $\langle \cdot, \cdot\rangle$ is the inner product on $\mathbb{H}.$
@@ -47,10 +48,9 @@ Consider the following optimization problem for finding the minimum enclosing ba
 \end{equation}
 Show how to derive the dual optimization problem:
 \begin{equation}
-	\max_{\alpha\in\mathbb{R}^m} \quad \sum_{i=1}^m \alpha_i k(x_i, x_i) - \frac{1}{2}\sum_{i,j=1}^m \alpha_i\alpha_j k(x_i,x_j) \quad \text{subject to } \quad \alpha_i \geq 0 \;{\rm and}\; \sum_{i=1}^m \alpha_i = 1\quad i=1,\ldots,m.
+	\max_{\alpha\in\mathbb{R}^m} \quad \sum_{i=1}^m \alpha_i k(x_i, x_i) - \sum_{i,j=1}^m \alpha_i\alpha_j k(x_i,x_j) \quad \text{subject to } \quad \alpha_i \geq 0 \;{\rm and}\; \sum_{i=1}^m \alpha_i = 1\quad i=1,\ldots,m.
 \end{equation}
-Prove that the optimal solution $c = \sum_{i=1}^m \alpha_i \Phi(x_i)$ is a convex combination of the features at the training points $x_1,\ldots,x_m.$ These features are analogous to the support vectors in SVMs.
-
+Prove that the optimal solution $c = \sum_{i=1}^m \alpha_i \Phi(x_i)$ is a convex combination of the features at the training points $x_1,\ldots,x_m.$ 
 
 Hints: i) Make problem finite dimensional in $c$ using Kernel trick. Justify this step as done in class. ii) write down the KKT conditions for the primal problem. 
 
@@ -62,8 +62,30 @@ Consider the hypothesis class
 \begin{equation}
 	\mathcal{H} = \left\{h_{c,r}(x) = r^2 - \|c-\Phi(x)\|^2:\|c\|\leq \Lambda, 0 < r \leq R\right\},
 \end{equation}
-where $\|\cdot\|$ is the norm induced by the inner product on $\mathbb{H},$ i.e., $\|c\| = \sqrt{\langle c,c\rangle}.$ A hypothesis $h_{c,r}$ is an anomaly detector that flags an input $x$ as an anomaly if $h_{c,r}(x) \leq 0.$
+where $\|\cdot\|$ is the norm induced by the inner product on $\mathbb{H},$ i.e., $\|c\| = \sqrt{\langle c,c\rangle}.$ A hypothesis $h_{c,r}$ is an anomaly detector that flags an input $x$ as an anomaly if $h_{c,r}(x) < 0.$
 Show that if $\sup_x \|\Phi(x)\| < M,$ then the solution to the MEB problem in Part 1 is in $\mathcal{H}$ with $\Lambda \leq M$ and $R \leq 2M.$
 
-Hint: show that the optimal solution for $r$ in Part 1 is $r \leq  .$
+Hint: Use the complementarity conditions in Part 1 to get an expression for an optimal $r$ in terms of $\alpha$ and $\Phi(x_i)$. Now that you have expressions for optimal $c$ and $r$, prove that their norms are upper bounded by $M$ and $2M$ respectively.
+
+\subsection*{Part 3: the kernel SVM interpretation (30 pts)} 
+
+Let $k(x,x) = 1$, a constant independent of $x$ (this is, e.g., true for the Gaussian kernel). Derive the following margin-maximization and minimization of the slack penalty $\sum_i \xi$ for finding a hyperplane for this 1-class classification problem:
+\begin{equation}
+	\label{eq:maxmargin}
+	\min_{w, \xi} (1/2)\|w\|^2 + C \|\xi\|_1 \quad 
+	\text{subject to} \quad \langle w,\Phi(x_i)\rangle \geq 1 - \xi_i, \xi \geq 0, i \in [m].
+\end{equation}
+Here, all the training points have true labels 1. Suppose $\nu$ is an upper bound on the fraction of support vectors out of $m$ training points. Equivalently, a maximum of $\nu \: m$ points are allowed to have $\alpha_i \neq 0$: they could be misclassified as anomalies ($\xi > 1$) or classified with a nonzero penalty ($1 > \xi_i \geq 0$) as non-anomalies.
+
+Show that when $C = 1/(\nu m)$, the above problem is equivalent to MEB in Part 1. This means that one can equivalently find a hyperplane instead of a minimal enclosing hypersphere in feature space (see \cite{schol} for more on this).
+
+\vspace{0.1in}
+Hints: 1) follow the derivation done in class of maximum (geometric) margin classification leading to the soft SVM problem; now there is only one label class and the domain space is feature space, i.e., $x_i \to \Phi(x_i).$ 2) show that the dual form of MEB in Part 1 reduces, when $k(x,x)=1$ to \begin{equation}
+	\min_\alpha \sum_{i,j}^m \alpha_i \alpha_j k(x_i, x_j) \quad \text{subject to } \quad \alpha_i \geq 0, \sum_i \alpha_i = 1, i \in [m].
+\end{equation}
+3) Next derive the dual form of \eqref{eq:maxmargin} by first writing down the KKT conditions. Your results should be very similar to the soft-SVM KKT conditions (5.26-5.30 in Mohri et al).
+4) Now, $\alpha_i = 0$ or $0 < \alpha \leq C$. Thus, $\sum_{i=1}^m \alpha_i \leq C \times $ number of support vectors. Using this, prove that the two dual forms are equivalent.  
+
+\bibliographystyle{plain}
+\bibliography{refs}
 \end{document}
