@@ -1,0 +1,109 @@
+\documentclass[final]{beamer}
+\usepackage{eulervm,verbatim}          
+\usepackage[scaled]{helvet}
+\usepackage[most]{tcolorbox}
+\setbeamercolor{frametitle}{fg=black,bg=white} % Colors of the block titles
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+\definecolor{darkcerulean}{rgb}{0.03, 0.27, 0.49}
+\newcommand{\citesmall}[1]{[{\color{darkcerulean}\begin{small} \textbf{#1} \end{small}}]}
+\setbeamertemplate{footline}[frame number]
+\DeclareMathOperator*{\argmin}{arg\,min}
+\usepackage{graphicx}  % Required for including images
+\usepackage{bbm}
+\usepackage{booktabs} % Top and bottom rules for tables
+\definecolor{burgundy}{rgb}{0.5, 0.0, 0.13}
+\newcommand{\highlight}[1]{{\color{burgundy} \textbf{#1}}}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=magenta,
+    pdftitle={CSE6740-Lecture 14},
+    pdfauthor={Nisha Chandramoorthy},
+    pdflang={en-US}
+}
+
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION 
+%----------------------------------------------------------------------------------------
+\title{\begin{huge}{Lecture 14: Neural Networks}\end{huge}} % Poster title
+
+
+\author{Nisha Chandramoorthy} % Author(s)
+
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\frame{\titlepage}
+
+%----------------------------------------------------------------------------------------
+%	OBJECTIVES
+%----------------------------------------------------------------------------------------
+\begin{frame}{Last time}
+	\begin{itemize}
+		\item A hypothesis class restricted to some $C$ \emph{shatters} $C$ if any binary function on $C$ is in the class
+		\pause
+		\item VC dimension, ${\rm VCdim}(\mathcal{H})$: maximal size of $C \subseteq \mathcal{X}$ that is shattered by $\mathcal{H}.$ 
+		\pause
+		\item Eg 1. VCdim of threshold functions on $\mathbb{R}$ is 1.
+		\pause
+		\item Eg 2: VCdim of indicator functions on intervals of $\mathbb{R}$ is 2.
+		\pause
+		\item Eg 3: VCdim of a finite class $\mathcal{H}$ $\leq \log_2|\mathcal{H}|$ 
+	\end{itemize}
+\end{frame}
+\begin{frame}{Generalization bounds based on VC dimension}
+	\begin{itemize}
+		\item $\mathcal{H} = \{h_\theta(x) = \sin(\theta x): \theta \in \mathbb{R}\}$.
+		\pause
+		\item VCdim is $\infty$
+		\pause 
+	\item Binary classification generalization for 0-1 loss over class $\mathcal{H}$ with VCdim = $d$: there exist constants $C_1, C_2 > 0$ such that 
+		$$ C_1 \dfrac{d + \log(1/\delta)}{\epsilon^2} \leq m_{\mathcal{H}}(\epsilon, \delta) \leq C_2 \dfrac{d + \log(1/\delta)}{\epsilon}$$
+	
+	\end{itemize}
+
+\end{frame}
+\begin{frame}{(partial) History - trace back from transformers (source:Wikipedia)}
+	\begin{itemize}
+		\item Transformer architecture: 2017, Google Brain [Vaswani et al]
+		\item Deep learning, unsupervised learning 2010s (e.g., GANs 2014)...
+		\item ImageNet: 2009, Fei Fei Li 
+		\item Long-short term memory (LSTM) architecture: 1997, [Hochreiter and Schmidhuber]
+		\item Convolutional NNs: (inspired from) 1979 work by [Fukushima];  Recurrent neural networks: 1982 [Hopfield]
+		\item ...
+		\item Automatic Differentiation: 1970 [Linnainmaa]
+		\item ...
+		\item First neural networks: 1950s [Minsky and others]
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Fully connected Neural Networks}
+	\begin{itemize}
+		\item Neuron: input $\sum_j w_j h_j$; output $\sigma(\sum_j w_j h_j)$
+		\item Organized into layers of depth $l$ and width $n$
+		
+		\item Graph: $V, E, \sigma, w$; weight function.
+		\pause
+	\item VC dim of $\mathcal{H}_{V, E, {\rm sign}} \leq C |E|\log |E|$
+		\pause
+		\begin{itemize}
+		\item Proof: Growth function $\tau_{\mathcal{H}}(m) = \max_{C, |C|=m} |\mathcal{H}|_C| $
+			\pause Fact 1: Let $\mathcal{H} =\mathcal{H}_l \circ \cdots \circ \mathcal{H}_1.$ Then,  $\tau_{\mathcal{H}}(m) \leq \prod_{t=1}^l \tau_{\mathcal{H}_t}(m)$.
+			\pause 
+			\item
+			Fact 2: Let $\mathcal{H} =\mathcal{H}^{(1)}  \cdots \circ \mathcal{H}^{(n)}.$ Then,  $\tau_{\mathcal{H}}(m) \leq \prod_{t=1}^l \tau_{\mathcal{H}^{(t)}}(m)$.
+			\pause 
+		\item Fact 3: Sauer's Lemma: $\tau_{\mathcal{H}}(m) = (em/d)^d$, where $d \geq $ VCdim $(\mathcal{H})$ 
+		\end{itemize}
+	\end{itemize}
+
+\end{frame}
+
+\end{document}
