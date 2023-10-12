@@ -6,39 +6,40 @@ from wordcloud import WordCloud
 # import CSV file
 data = pd.read_csv('survey.csv', delimiter=',',dtype='str,str,str', names=["time","bad", "good"],header=None)
 g_words = ["hw", "lec style/cont", "theory/rigor", "nothing", "Instructor OH", "Zoom option", "SVM", "team work", "coding", "Taking feedback"]
-b_words = ["hw len/diff", "hw support", "theory/rigor", "in-class eg", "lec pace", "hw clarity", "hw/lec conn", "lec notes", "extra cred hw", "feedback", "review/preview"]
+b_words = ["hw len/diff", "hw support", "theory/rigor", "in-class eg", "lec pace", "hw clarity", "hw/lec conn", "lec notes", "extra cred hw", "feedback", "review/preview", "lec style/cont", "lec detail", "workload","More OH", "visual"]
 
 num_good = np.zeros(len(g_words),dtype=int)
 num_bad = np.zeros(len(b_words),dtype=int)
 
 # hw len/diff
-num_good[0] = 4 
-num_bad[0] = 7
+num_good[0] = 5 
+num_bad[0] = 13
 
 # hw support
-num_bad[1] = 6
+num_bad[1] = 9
 
 # lecture style/contents
-num_good[1] = 11
+num_good[1] = 17
+num_bad[11] = 2
 
 # theory/rigor
-num_good[2] = 5
-num_bad[2] = 2
+num_good[2] = 11
+num_bad[2] = 3
 
 # nothing
-num_good[3] = 3
+num_good[3] = 4
 
 # Instructor OH
-num_good[4] = 4
+num_good[4] = 9
 
 # examples in class
-num_bad[3] = 7
+num_bad[3] = 9
 
 # lec pace
-num_bad[4] = 1
+num_bad[4] = 3
 
 # hw clarity
-num_bad[5] = 8
+num_bad[5] = 13
 
 # Zoom option
 num_good[5] = 2
@@ -60,16 +61,25 @@ num_bad[8] = 2
 
 # feedback
 num_bad[9] = 1
-num_good[9] = 2
+num_good[9] = 4
 
 # coding
-num_good[8] = 2
+num_good[8] = 4
 
 # review/preview
-num_bad[10] = 1
+num_bad[10] = 2
 
+# lec detail
+num_bad[12] = 1
 
+# workload
+num_bad[13] = 2
 
+# more OH
+num_bad[14] = 1
+
+# visual
+num_bad[15] = 1
 # arrange in descending order
 ind_good = np.argsort(-num_good)
 ind_bad = np.argsort(-num_bad)
