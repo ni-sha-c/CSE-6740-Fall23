@@ -1,0 +1,98 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,amsfonts,mathtools}
+\usepackage[tagged, highstructure]{accessibility}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{scribe}
+\usepackage{listings}
+\usepackage{natbib,verbatim}
+
+\usepackage{bbm}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=magenta,
+    citecolor=magenta,
+    pdftitle={Midterm I},
+    pdfauthor={Nisha Chandramoorthy},
+    pdflang={en-US}
+}
+
+%\Scribe{Your Name}
+\title{Midterm I}
+\LectureNumber{CSE 6740}
+\LectureDate{Due Oct 19th, '23 (1:40 pm ET)} 
+\Lecturer{Do not copy}
+\LectureTitle{Midterm I}
+
+\lstset{style=mystyle}
+
+\begin{document}
+\MakeScribeTop
+\begin{itemize}
+	\item You have 3 questions and 70 minutes to complete them.
+	\item Do not consult any material outside of your cheat sheet.  	\item Do not copy or collaborate with others.
+	\item Return your exam sheets along with your scratch work.
+	\item Write complete proofs, including all the assumptions made, for full credit.
+	\item All the best!
+\end{itemize}
+
+\section*{Question 1: Kernel Ridge Regression (30 points)}
+Let $\mathbb{H}$ be an RKHS with inner product $\langle \cdot, \cdot\rangle,$ induced norm, $\|\cdot\|$ and an associated kernel $k(\cdot, \cdot)$. Consider the kernel ridge regression problem
+\begin{align}
+	\label{eq:krr}
+	\min_{h \in \mathbb{H}} \hat{R}_S(h) = \min_{h\in \mathbb{H}} \frac{1}{m} \sum_{i=1}^n (y_i - h(x_i))^2 + \lambda \|h\|_{\mathbb{H}}^2, 
+\end{align}
+where $\lambda > 0$ is a regularization parameter, $S = \{(x_i,y_i)\}_{1\leq i\leq m}$ is a training set with iid samples.
+\newpage
+\subsection*{Part 1 (5 points)}
+
+Show that the minimizer of the above problem \eqref{eq:krr} is given by
+\begin{align}
+	\label{eq:krr-sol}
+	h_S(x) = \sum_{i=1}^m ((K + \lambda I)^{-1} Y)_i k(x_i, x),
+\end{align}
+where $K$ is the $m\times m$ Gram matrix, $K_{ij} = k(x_i, x_j)$ and $Y = (y_1, \ldots, y_m)^\top$.
+You are allowed to use the representer theorem without proof.
+
+
+\newpage
+\subsection*{Part 2 (5 points)}
+Let $S_i$ be the training set $S$ without the $i$-th sample, i.e., $S_i = S \setminus \{(x_i, y_i)\}$. As done in \eqref{eq:krr-sol}, denote by $h_{S}$ the minimizer of the problem \eqref{eq:krr} with training set $S$. Thus, $h_{S_i}$ is the minimizer of the problem \eqref{eq:krr} with training set $S_i.$ Let $S'_i$ be the set $S$ with the $i$th element being $(x_i, h_{S_i}(x_i))$ (instead of $(x_i, y_i))$. Show that $h_{S_i} = h_{S'_i}$.
+\newpage
+
+\subsection*{Part 3 (5 points)}
+Define $Y_i = (y_1, \ldots, y_{i-1}, h_{S_i}(x_i), y_{i+1}, \ldots, y_m)^T = Y - y_i e_i + h_{S_i}(x_i) e_i,$ where $e_i$ is the standard basis element with 1 at the $i$th entry and 0 elsewhere. Show that $h_{S_i}(x_i) = Y_i^\top (K + \lambda I)^{-1} Ke_i$.
+
+\newpage
+\subsection*{Part 4 (5 points)}
+Define the following leave-one-out error:
+\begin{align}
+	\label{eq:loo}
+	\hat{R}_S^{\rm l} = \frac{1}{m} \sum_{i=1}^m (y_i - h_{S_i}(x_i))^2.
+\end{align}
+Show that $\hat{R}_S^{\rm l}$ admits the expression
+\begin{align}
+	\label{eq:loo-sol}
+	\hat{R}_S^{\rm l} = \frac{1}{m} \sum_{i=1}^m \Big(\dfrac{h_S(x_i)-y_i}{((K + \lambda I)^{-1} K)_{ii}}\Big)^2
+\end{align}
+
+(Thus, when the diagonal entries of $(K + \lambda I)^{-1} K$ are all 1, $\hat{R}_S^{\rm l} = \hat{R}_S(h_S)$. That is, the leave-one-out error can be computed by solving just one ERM problem instead of $m$-many that \eqref{eq:loo} suggests.)
+
+\newpage
+\section*{Question 2: VC dimension (5 points)}
+
+
+
+\section*{Question 3: Positive definite kernels (5 points)}
+Show that $k(x,y) = e^{\big(\sum_{i=1}^d{\rm min}(|x_i|,|y_i|))\big)}$ is a positive definite kernel on $\mathbb{R}^d\times\mathbb{R}^d.$
+ 
+
+
+\bibliographystyle{plain}
+\bibliography{refs}
+\end{document}
