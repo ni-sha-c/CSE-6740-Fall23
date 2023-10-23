@@ -35,10 +35,11 @@ def create_model():
 def train(model, args):
     train_dataset = datasets.MNIST(root='./data', train=True, download=True, transform=transforms.ToTensor())
     test_dataset = datasets.MNIST(root='./data', train=False, download=True, transform=transforms.ToTensor())
-    train_loader = DataLoader(train_dataset, batch_size=args.batchsize, shuffle=True)
+    train_loader = DataLoader(train_dataset, batch_size=args.batchsize, shuffle=False)
     test_loader = DataLoader(test_dataset, batch_size=args.batchsize, shuffle=False)
     
     optimizer = optim.SGD(model.parameters(), lr=args.lr)
+    # ADAM, ADAMW
     model.train()
     criterion = nn.CrossEntropyLoss()
     for epoch in range(args.epoch):
@@ -91,7 +92,6 @@ def visualize_dataset(dataset):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--c", type=float, default=0.01)
     parser.add_argument("--lr", type=float, default=0.1)
     parser.add_argument("--batchsize", type=int, default=5)
     parser.add_argument("--epoch", type=int, default=20)

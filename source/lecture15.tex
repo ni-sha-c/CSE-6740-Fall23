@@ -105,6 +105,18 @@
 	\end{itemize}
 
 \end{frame}
+\begin{frame}{Training}
+
+\begin{tcolorbox}
+	SGD update step: $w_{t+1} = w_t - \eta \tilde{\nabla}\hat{R}_S(w_t)$
+\end{tcolorbox}
+	\begin{itemize}
+		\item $\tilde{\nabla}\hat{R}_S(w_t)$ is an unbiased estimate of $\nabla \hat{R}_S(w_t)$
+		\item Convergence for convex $\hat{R}_S$ and $\eta$ small enough.
+		\item Gradients implemented using backpropagation algorithm
+	\end{itemize}
+\end{frame}
+
 \begin{frame}{Universal approximation theorems}
 	\begin{tcolorbox}
 		Theorem [Park et al 2020, ICLR] (Informal) For $f\in L^p(\mathbb{R}^n, \mathbb{R}^m)$, and any $\epsilon > 0$, there exists a fully connected ReLU network $F$ of width exactly $d = \max\{n+1,m\}$ such that $\|f - F\|_p^p < \epsilon.$
