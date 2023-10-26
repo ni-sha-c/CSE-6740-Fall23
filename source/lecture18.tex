@@ -1,0 +1,180 @@
+\documentclass[final]{beamer}
+\usepackage{amsmath,amssymb,amsthm,amsfonts,graphicx}
+\usepackage{eulervm,verbatim}          
+\usepackage[scaled]{helvet}
+\usepackage[most]{tcolorbox}
+\setbeamercolor{frametitle}{fg=black,bg=white} % Colors of the block titles
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+\definecolor{darkcerulean}{rgb}{0.03, 0.27, 0.49}
+\newcommand{\citesmall}[1]{[{\color{darkcerulean}\begin{small} \textbf{#1} \end{small}}]}
+\setbeamertemplate{footline}[frame number]
+\DeclareMathOperator*{\argmin}{arg\,min}
+\usepackage{graphicx}  % Required for including images
+\usepackage{bbm}
+\usepackage{booktabs} % Top and bottom rules for tables
+\definecolor{burgundy}{rgb}{0.5, 0.0, 0.13}
+\newcommand{\highlight}[1]{{\color{burgundy} \textbf{#1}}}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=magenta,
+    pdftitle={CSE6740-Lecture 18},
+    pdfauthor={Nisha Chandramoorthy},
+    pdflang={en-US}
+}
+
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION 
+%----------------------------------------------------------------------------------------
+\title{\begin{huge}{Lecture 14: Convolutional Neural Networks and Intro to PCA}\end{huge}} % Poster title
+
+
+\author{Nisha Chandramoorthy} % Author(s)
+
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\frame{\titlepage}
+
+%----------------------------------------------------------------------------------------
+%	OBJECTIVES
+%----------------------------------------------------------------------------------------
+\begin{frame}{Motivation for dimensionality reduction}
+	\begin{itemize}
+		\item Map high-dimensional data to a lower-dimensional space
+		\pause
+		\item Why? Computational efficiency in downstream tasks
+		\pause
+		\item Visualization, interpretation
+		\pause
+		\item Better generalization (avoid overfitting)
+
+			
+	\end{itemize}
+\end{frame}
+\begin{frame}{Autoencoder decoder}
+	\begin{align}
+		(E^*, D^*) = \argmin_{E, D} \sum_{i=1}^m \|x_i - D(E(x_i))\|^2
+	\end{align}
+	\begin{itemize}
+	\item Posed as ERM problem.
+	\pause
+	\item $E$ is encoder, $D$ is decoder. 
+	\pause
+\item $E$ maps $x$ to $z$ (latent space), $D$ maps $z$ to $\hat{x}$ (reconstruction).
+	\pause
+\item Both parameterized as Neural Networks.
+	\end{itemize}
+\end{frame}
+\begin{frame}{Variational autoencoders}
+	\begin{itemize}
+	\item Probabilistic encoder and decoder.
+	\pause
+	\item Encoder: $q(z|x)$, Decoder: $p(x|z)$
+	\end{itemize}
+
+\end{frame}
+\begin{frame}
+	\begin{figure}
+		\includegraphics[width=\textwidth]{encdec.png}
+	\end{figure}
+	\begin{itemize}
+		\item tends to overfit as a Generative model
+		\pause
+		\item VAE: uses VI to regularize the latent space.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Variational Inference}
+	\begin{itemize}
+		\item Minimize KL divergence between $q(z|x)$ and $p(z|x)$.
+		\item Recall KL divergence: $D_{\rm KL}(p||q) = \int p(x) \log \frac{p(x)}{q(x)} dx$ 
+		\pause
+		\item $D_{\rm KL}(p||q) \geq 0$ and $D_{\rm KL}(p||q) = 0$ iff $p = q$. 
+		\pause
+		\item 
+		\begin{align*}
+		D_{\rm KL}(q_\theta(z|x)||p(z|x)) &= \int q_\theta(z|x) \log \frac{q_\theta(z|x)}{p(z|x)} dz \\
+			&= E_{z \sim q_\theta(z|x)} \left[\log q_\theta(z|x)\right] \\
+			&- E_{z \sim q_\theta(z|x)} \left[\log p(z|x)\right]  \\
+		&= E_{z \sim q_\theta(z|x)} \left[\log p(x|z)\right] - D_{\rm KL}(q_\theta(z|x)||p(z)) + c(x) \\
+		\end{align*}
+	\end{itemize}
+	
+\end{frame}
+\begin{frame}{VAEs}
+	\begin{itemize}
+		\item Conditional Gaussian assumption: $\log p(x|z) = \|x-f(z)\|^2/c.$
+		\pause 
+		\item Typically $q_\theta$ is parameterized with its mean and variance as Neural Networks.
+		\pause
+		\item \begin{align}
+			{\rm arg max}_{\theta, f} \sum_{i=1}^m \log p(x_i|z_i) - D_{\rm KL}(q_\theta(z_i|x_i)||p(z_i))
+			\end{align}
+			
+	\end{itemize}
+\end{frame}
+\begin{frame}
+\begin{figure}
+	\includegraphics[width=\textwidth]{nonlinearDimRed.png}
+	\caption{Courtesy: \url{https://towardsdatascience.com/understanding-variational-autoencoders-vaes-f70510919f73}}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\begin{figure}
+	\includegraphics[width=\textwidth]{vae.png}
+	\caption{Courtesy: \url{https://towardsdatascience.com/understanding-variational-autoencoders-vaes-f70510919f73}}
+\end{figure}
+\end{frame}
+\begin{frame}{PCA}
+	\begin{itemize}
+	\item when $E$ and $D$ are linear, this is equivalent to PCA.
+	\pause 
+	\item $E(x) = Wx$, $D(z) = W^\top z$.
+	\pause
+	\item Let $C = \sum_{i=1}^m x_i x_i^\top = X^\top X$ be the data correlation matrix.
+	\pause 
+	\item $C$ is symmetric and positive semi-definite, $C = V \Lambda V^\top$.
+	\item Theorem PCA: among linear hypothesis classes, $E^* = V^\top$, $D^* = V,$ where $V$ is the matrix of eigenvectors of $C = X^\top X$.
+	\end{itemize}
+\end{frame}
+\begin{frame}{Best linear subspace}
+	\begin{figure}
+	\includegraphics[width=0.8\textwidth]{bestLinearSubspace.png}
+	\caption{Courtesy: \url{https://towardsdatascience.com/understanding-variational-autoencoders-vaes-f70510919f73}}
+
+	\end{figure}
+\end{frame}
+\begin{frame}{PCA by SVD}
+	\begin{itemize}
+		\item When data are centered, take SVD, $X = U \Sigma V^T$.
+		\pause
+		\item Correlation matrix $C =  X^T X = V \Sigma^2 V^T$.
+		\pause
+		\item principal components: $X V = U \Sigma$.
+		\pause
+		Numerical stability
+	\end{itemize}
+\end{frame}
+\begin{frame}{Convolutional Neural Networks (source: cs231n.stanford.edu)}
+	\begin{itemize}
+		\item Suitable for image recognition. Won the 2012 ImageNet competition and subsequent ones.
+		\item Three types of layers: convolutional, FC, pooling
+		\item Convolutional layer: accepts a volume of size $W_1 \times H_1 \times D_1$ and outputs a volume of size $W_2 \times H_2 \times D_2$ where $W_2 = (W_1 - F + 2P)/S + 1$ and $H_2 = (H_1 - F + 2P)/S + 1$ and $D_2 = K$.
+
+		\item $K$ is number of filters, $F$ is filter size, $S$ is stride, $P$ is padding.
+		\item Pooling layer: downsamples along width and height, and optionally along depth.
+		\item FC layer: computes class scores, resulting in volume of size $1 \times 1 \times K$.
+
+	
+	\end{itemize}
+\end{frame}
+\end{document}
