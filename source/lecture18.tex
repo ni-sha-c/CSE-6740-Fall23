@@ -101,10 +101,8 @@
 		\pause
 		\item 
 		\begin{align*}
-		D_{\rm KL}(q_\theta(z|x)||p(z|x)) &= \int q_\theta(z|x) \log \frac{q_\theta(z|x)}{p(z|x)} dz \\
-			&= E_{z \sim q_\theta(z|x)} \left[\log q_\theta(z|x)\right] \\
-			&- E_{z \sim q_\theta(z|x)} \left[\log p(z|x)\right]  \\
-		&= E_{z \sim q_\theta(z|x)} \left[\log p(x|z)\right] - D_{\rm KL}(q_\theta(z|x)||p(z)) + c(x) \\
+		D_{\rm KL}(q_\theta(z|x)||p(z|x)) &= \int q_\theta(z|x) \log \frac{q_\theta(z|x)}{p(z|x)} dz) \\
+			&= E_{z \sim q_\theta(z|x)} \left[\log p(x|z)\right] \\ &- D_{\rm KL}(q_\theta(z|x)||p(z)) + c(x) \\
 		\end{align*}
 	\end{itemize}
 	
