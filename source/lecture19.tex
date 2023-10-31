@@ -110,6 +110,19 @@
 
 	\end{figure}
 \end{frame}
+\begin{frame}{PCA applied to Yale dataset}
+	\begin{figure}
+		\includegraphics[width=\textwidth]{pca-example.png}
+	\caption{Courtesy: Hou, Sun, Chong, Zheng 2014}
+	\end{figure}
+\end{frame}
+\begin{frame}{PCA applied to Yale dataset}
+	\begin{figure}
+		\includegraphics[width=\textwidth]{pca-example-2.jpg}
+	\caption{Courtesy: Shalev-Schwartz and Ben-David 2014}
+	\end{figure}
+\end{frame}
+
 \begin{frame}{Linear algebra review: SVD}
 	\begin{itemize}
 		\item for any matrix $X \in \mathbb{R}^{m\times d}$, $X = U \Sigma V^\top$, where $U \in \mathbb{R}^{m\times m}$, $V \in \mathbb{R}^{d\times d}$ are orthogonal matrices, and $\Sigma \in \mathbb{R}^{m\times d}$ is a diagonal matrix.
@@ -151,6 +164,17 @@
 	\pause
 	\item $\nabla r(x) = \frac{2}{x^\top x} (Ax - r(x)x)$.
 \end{itemize}
+\end{frame}
+\begin{frame}{PCA by SVD}
+	\begin{itemize}
+		\item When $m > d,$ do eigenvalue decomposition of $X^\top X$ or SVD of $X$.
+		\pause
+		\item When $m < d,$ do eigenvalue decomposition of $XX^\top.$ If $v_1, v_2,\cdots, v_n$ are the $n$ largest eigenvectors, principal vectors are $\frac{1}{\|X^\top v_i\|} X^\top v_i$.
+		\pause
+		\item Computational complexity: $O(\min(m^2d, md^2))$.
+
+	\end{itemize}
+
 \end{frame}
 \begin{frame}{Convolutional Neural Networks (source: cs231n.stanford.edu)}
 	\begin{itemize}
