@@ -31,7 +31,7 @@
 %----------------------------------------------------------------------------------------
 %	TITLE SECTION 
 %----------------------------------------------------------------------------------------
-\title{\begin{huge}{Lecture 14: Convolutional Neural Networks and Intro to PCA}\end{huge}} % Poster title
+\title{\begin{huge}{Lecture 18: VAEs, Intro to PCA}\end{huge}} % Poster title
 
 
 \author{Nisha Chandramoorthy} % Author(s)
@@ -159,20 +159,7 @@
 		\pause
 		\item principal components: $X V = U \Sigma$.
 		\pause
-		Numerical stability
-	\end{itemize}
-\end{frame}
-\begin{frame}{Convolutional Neural Networks (source: cs231n.stanford.edu)}
-	\begin{itemize}
-		\item Suitable for image recognition. Won the 2012 ImageNet competition and subsequent ones.
-		\item Three types of layers: convolutional, FC, pooling
-		\item Convolutional layer: accepts a volume of size $W_1 \times H_1 \times D_1$ and outputs a volume of size $W_2 \times H_2 \times D_2$ where $W_2 = (W_1 - F + 2P)/S + 1$ and $H_2 = (H_1 - F + 2P)/S + 1$ and $D_2 = K$.
-
-		\item $K$ is number of filters, $F$ is filter size, $S$ is stride, $P$ is padding.
-		\item Pooling layer: downsamples along width and height, and optionally along depth.
-		\item FC layer: computes class scores, resulting in volume of size $1 \times 1 \times K$.
-
-	
+		Use numerically stable algorithm for SVD
 	\end{itemize}
 \end{frame}
 \end{document}
