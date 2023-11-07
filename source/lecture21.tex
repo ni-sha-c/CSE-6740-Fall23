@@ -1,0 +1,246 @@
+\documentclass[final]{beamer}
+\usepackage{amsmath,amssymb,amsthm,amsfonts,graphicx}
+\usepackage{eulervm,verbatim}          
+\usepackage[scaled]{helvet}
+\usepackage[most]{tcolorbox}
+\setbeamercolor{frametitle}{fg=black,bg=white} % Colors of the block titles
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+\definecolor{darkcerulean}{rgb}{0.03, 0.27, 0.49}
+\newcommand{\citesmall}[1]{[{\color{darkcerulean}\begin{small} \textbf{#1} \end{small}}]}
+\setbeamertemplate{footline}[frame number]
+\DeclareMathOperator*{\argmin}{arg\,min}
+\usepackage{graphicx}  % Required for including images
+\usepackage{bbm}
+\usepackage{booktabs} % Top and bottom rules for tables
+\definecolor{burgundy}{rgb}{0.5, 0.0, 0.13}
+\newcommand{\highlight}[1]{{\color{burgundy} \textbf{#1}}}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=magenta,
+    pdftitle={CSE6740-Lecture 21},
+    pdfauthor={Nisha Chandramoorthy},
+    pdflang={en-US}
+}
+
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION 
+%----------------------------------------------------------------------------------------
+\title{\begin{huge}{Lecture 21: Johnson-Lindenstrauss lemma, random projections, CNN}\end{huge}} % Poster title
+
+
+\author{Nisha Chandramoorthy} % Author(s)
+
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\frame{\titlepage}
+
+%----------------------------------------------------------------------------------------
+%	OBJECTIVES
+%----------------------------------------------------------------------------------------
+\begin{frame}{Last time: PCA interpretation}
+	\begin{itemize}
+		\item Exact when $X^\top X$ is rank $n.$
+		\pause
+	\item Maximizes variance. Let $x$ be a random vector chosen uniformly from centered data $x_1,\cdots,x_m.$ Then, for any $w \in \mathbb{R}^d,$ 
+		$${\rm var}(x\cdot w) = \dfrac{1}{m}\sum_{i=1}^m (w\cdot x_i)^2.$$
+	\pause
+\item First principal component maximizes ${\rm var}(x\cdot w)$ over all $w$ with $\|w\| = 1.$ (See Ex 23.4 in book.)
+	\pause
+	\item Informally, PCA rotates the data so that the variance is maximized along the first axis, then the second, and so on.
+	\pause
+	\item Separates dissimilar points
+			
+	\end{itemize}
+\end{frame}
+\begin{frame}{Kernel PCA}
+	\begin{itemize}
+		\item Let $V$ be the matrix of the top $n$ eigenvectors of $K = X X^\top \in \mathbb{R}^{m\times m}.$ 
+		\pause
+		\item Then, principal vectors are $d^*_i = \frac{1}{\|X^\top v_i\|} X^\top v_i,$ $i = 1,2,\cdots,n.$
+		\pause
+		\item For some PD kernel, if $K_{ij} = k(x_i,x_j) = \langle \phi(x_i), \phi(x_j)\rangle = (X X^\top)_{ij},$ can compute $K$ only using kernel evaluations.
+		
+	\end{itemize}
+\end{frame}
+\begin{frame}{Graphical reprensentation of $X$}
+	\begin{itemize}
+		\item Choose weighting, such as, $w_{ij} = \exp(-\|x_i - x_j\|^2/2\sigma^2).$ As $\sigma \to 0,$ $w_{ij} \to \mathbbm{1}_{i=j}.$ The $m \times m$ matrix $W$ is the adjacency matrix of a graph.
+		\pause
+		\item Let $D$ be the diagonal matrix with $D_{ii} = \sum_{j=1}^m w_{ij}.$
+		\pause 
+		\item Graph laplacian: $L = D - W.$
+		\pause 
+		\item Detects local structure / clusters in data.
+
+	\end{itemize}
+
+\end{frame}
+\begin{frame}{Laplacian eigenmaps}
+	\begin{itemize}
+		\item Want to solve: $\min_{y_1,\cdots,y_m} \sum_{i=1}^m \sum_{j=1}^m w_{ij} \|y_i - y_j\|^2.$
+		\pause
+		\item optimal embeddings: $y_i = E(x_i) = U[i,-n:]$ where $U$ is the matrix of eigenvectors of $L$.
+		\pause
+		\item For any vector $v$, $v^\top L v = (1/2)\sum_{i, j=1}^m w_{ij} (v_i - v_j)^2.$
+		\pause
+		\item $L$ is positive semi-definite.
+	\end{itemize}
+\end{frame}
+\begin{frame}{Bottom $n$ eigenvectors}
+	\begin{itemize}
+		\item Rayleigh quotient optimality
+		\pause
+		\item Another interpretation: top $n$ eigenvectors of $L^\dagger.$ $L^\dagger_{ij}$ represents expected time for random walk $i \to j \to i.$ 
+		\pause
+		\item Kernel PCA with $K = L^\dagger$ is equivalent to Laplacian eigenmaps. 
+	\end{itemize}
+\end{frame}
+\begin{frame}{Stochastic neighbor embedding [Hinton and Roweis 2002]}
+\begin{itemize}
+	\item Stochastic neighbor embedding(SNE): conditional probability that $x_i$ would pick $x_j$ as its neighbor, given by
+	$$ p(x_j|x_i) = \frac{\exp(-\|x_i - x_j\|^2/2\sigma_i^2)}{\sum_{k\neq i} \exp(-\|x_i - x_k\|^2/2\sigma_i^2)}.$$
+\pause
+\item For the embeddings $y_i = E(x_i)$, 
+	$$q(y_j|y_i) = \frac{\exp(-\|y_i - y_j\|^2)}{\sum_{k\neq i} \exp(-\|y_i - y_k\|^2)}.$$
+\pause
+\item SNE minimizes $\sum_{i=1}^m D_{\rm KL}(p_i||q_i)$, where $p_i$ and $q_i$ are the conditional probabilities of $x_i$ and $y_i$ respectively.
+\pause
+\item Penalizes large distances between $x_i$ and $x_j$ but also preserves local structure.
+\end{itemize}
+\end{frame}
+\begin{frame}{tSNE [Van der Maaten and Hinton 2008]}
+	\begin{itemize}
+		\item tSNE cost function is $D_{\rm KL}(p||q) = \sum_{i=1}^m \sum_{j\neq i} p_{ij} \log \frac{p_{ij}}{q_{ij}},$ where $p_ij$ and $q_{ij}$ are the joint probabilities of $(x_i,x_j)$ and $(y_i,y_j)$ respectively.
+		\item Changes joint distribution to a heavy-tailed distribution, $q(y_j, y_i) = \frac{(1 + \|y_i - y_j\|^2)^{-1}}{\sum_{k\neq i} (1 + \|y_i - y_k\|^2)^{-1}}.$ 
+		\pause
+		\item approaches inverse square law on embedded space.
+
+	\end{itemize}
+\end{frame}
+\begin{frame}{tSNE visualization}
+\begin{figure}
+	\includegraphics[width=0.49\textwidth]{tsne.png}
+	\includegraphics[width=0.49\textwidth]{lle.png}
+	\caption{From Van der Maaten and Hinton 2008. tSNE (left) and LLE (right) on MNIST dataset. }
+\end{figure}
+\end{frame}
+\begin{frame}{Johnson-Lindenstrauss lemma}
+\begin{itemize}
+	\item Let $X \in \mathbb{R}^{m\times d}$ be a matrix of $m$ points in $\mathbb{R}^d.$
+	\pause
+\item Let $0 < \epsilon < 1/2, m > 4.$ Then, there exists a linear map $A: \mathbb{R}^d \to \mathbb{R}^n$ with $n = O(\epsilon^{-2} \log m)$ such that for all $x_i,x_j \in X,$ $i, j \in [m],$ $(1-\epsilon)\|x_i-x_j\|^2 \leq \|Ax_i - Ax_j\|^2 \leq (1+\epsilon)\|x_i-x_j\|^2.$
+	\pause
+	\item Informal: any set of points in high-dimensional space can be mapped to a lower-dimensional space while approximately preserving the distances between the points.
+\end{itemize}
+\end{frame}
+\begin{frame}{Proof}
+
+\begin{itemize}
+	\item Distortion by Gaussian random matrices: for any $x \in \mathbb{R}^d,$ when the entries $A_{ij}$ are iid standard Gaussian, 
+		\begin{align*}
+			\mathbb{P}(n(1 - \epsilon)\|x\|^2 &\leq \|Ax\|^2 \leq n(1+\epsilon)\|x\|^2)\\
+			&\geq 1 - 2\exp(-(\epsilon^2 - \epsilon^3) n/4).
+		\end{align*}
+	\pause
+\item Then, deterministic statement of J-L lemma follows from union bound over all $m^2$ pairs of points.
+\end{itemize}
+
+\end{frame}
+\begin{frame}{To show: distortion by Gaussian random matrices}
+\begin{itemize}
+	\item Let $A$ be a $n \times d$ matrix with iid standard Gaussian entries. Then, $E[(Ax)_j] = 0$ and ${\rm Var}((Ax)_j) = \|x\|^2,$ for all $j \leq n.$
+	\pause
+	\item Thus, $1/\|x\|^2 \|Ax\|^2$ is a $\chi^2$ random variable with $n$ degrees of freedom.
+	\pause
+	\item Chi-squared distribution: $\rho(x) = \frac{1}{2^{n/2}\Gamma(n/2)} x^{n/2 - 1} e^{-x/2}, x\geq 0.$
+	\pause
+	\item Models sum of squares of $n$ independent standard normal random variables.
+\end{itemize}
+\end{frame}
+\begin{frame}{Chi-squared distribution}
+	\begin{itemize}
+		\item Moment generating function, $M(t) = E[e^{tX}] = (1-2t)^{-n/2}, t < 1/2.$
+		\pause
+	\item Lemma 15.2 (Mohri et al): for a $\chi^2$ random variable $X$ with $n$ degrees of freedom, 
+	\begin{align}
+		\mathbb{P}(n(1 - \epsilon)\leq X \leq n(1+\epsilon)) \geq 1 - 2\exp(-(\epsilon^2 - \epsilon^3) n/4).
+	\end{align}
+	\pause
+\item Use Markov inequality and moment generating function to prove.
+	\pause
+	\item Use Lemma 15.2 to prove distortion by Gaussian random matrices.
+	\end{itemize}
+\end{frame}
+\begin{frame}{Implications: random projections}
+	\begin{itemize}
+		\item Random projections surprisingly preserve Euclidean distances between points.
+		\pause 
+		\item Can be used for dimensionality reduction.
+		\pause
+		\item Can also be used for speeding up nearest neighbor search (e.g. within Laplacian eigenmaps).
+		\pause
+		
+			
+	\end{itemize}
+\end{frame}
+\begin{frame}{Compressed sensing revisited}
+	\begin{itemize}
+	\item Let $A \in \mathbb{R}^{n\times d}$ be a random matrix with iid standard Gaussian entries. This is an example of a matrix that satisfies the RIP (restricted isometry property).
+	\pause 
+	\item $s$-RIP: for all subsets $S \subset [d]$ with $|S| \leq s,$ there exists an $\epsilon_s > 0$ such that
+		\begin{align}
+		(1-\epsilon)\|x\|^2 \leq \|Ax\|^2 \leq (1+\epsilon)\|x\|^2.
+	\end{align}
+	\pause
+	\item [Candes,Romberg, Tao 2005] If $x$ is $s$-sparse, then,
+	\begin{align}
+		x = {\rm argmin}_{z \in \mathbb{R}^d} \|z\|_1 \quad {\rm s.t.} \quad Ax = Az.
+	\end{align}
+	\end{itemize}
+\end{frame}
+\begin{frame}{Exact recovery of sparse data}
+	\begin{itemize}
+		\item Informal: if $x$ is $s$-sparse, then it can be recovered exactly from its compressed form $Ax.$
+		\pause
+		\item Very useful in signal processing, medical imaging, etc.
+		\pause
+		\item Reconstruction obtained by solving a convex program.
+	\end{itemize}
+
+\end{frame}
+\begin{frame}{Candes 2008}
+	\begin{figure}
+	\includegraphics[width=\textwidth]{compSensing.png}
+\end{figure}
+\end{frame}
+\begin{frame}{Candes 2008}
+	\begin{figure}
+	\includegraphics[width=0.5\textwidth]{l2recovery.png}
+	\includegraphics[width=0.49\textwidth]{l1recovery.png}
+	\end{figure}
+\end{frame}
+\begin{frame}{Convolutional Neural Networks (source: cs231n.stanford.edu)}
+	\begin{itemize}
+		\item Suitable for image recognition. Won the 2012 ImageNet competition and subsequent ones.
+		\item Three types of layers: convolutional, FC, pooling
+		\item Convolutional layer: accepts a volume of size $W_1 \times H_1 \times D_1$ and outputs a volume of size $W_2 \times H_2 \times D_2$ where $W_2 = (W_1 - F + 2P)/S + 1$ and $H_2 = (H_1 - F + 2P)/S + 1$ and $D_2 = K$.
+
+		\item $K$ is number of filters, $F$ is filter size, $S$ is stride, $P$ is padding.
+		\item Pooling layer: downsamples along width and height, and optionally along depth.
+		\item FC layer: computes class scores, resulting in volume of size $1 \times 1 \times K$.
+
+	
+	\end{itemize}
+\end{frame}
+
+
+\end{document}
