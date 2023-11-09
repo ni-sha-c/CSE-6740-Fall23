@@ -1,0 +1,293 @@
+\documentclass[final]{beamer}
+\usepackage{amsmath,amssymb,amsthm,amsfonts,graphicx}
+\usepackage{eulervm,verbatim}          
+\usepackage[scaled]{helvet}
+\usepackage[most]{tcolorbox}
+\setbeamercolor{frametitle}{fg=black,bg=white} % Colors of the block titles
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+\definecolor{darkcerulean}{rgb}{0.03, 0.27, 0.49}
+\newcommand{\citesmall}[1]{[{\color{darkcerulean}\begin{small} \textbf{#1} \end{small}}]}
+\setbeamertemplate{footline}[frame number]
+\DeclareMathOperator*{\argmin}{arg\,min}
+\usepackage{graphicx}  % Required for including images
+\usepackage{bbm}
+\usepackage{booktabs} % Top and bottom rules for tables
+\definecolor{burgundy}{rgb}{0.5, 0.0, 0.13}
+\newcommand{\highlight}[1]{{\color{burgundy} \textbf{#1}}}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=magenta,
+    pdftitle={CSE6740-Lecture 22},
+    pdfauthor={Nisha Chandramoorthy},
+    pdflang={en-US}
+}
+\usepackage{url}
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION 
+%----------------------------------------------------------------------------------------
+\title{\begin{huge}{Lecture 22: Clustering, LLoyd's algorithm (k-means), spectral clustering}\end{huge}} % Poster title
+
+
+\author{Nisha Chandramoorthy} % Author(s)
+
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\frame{\titlepage}
+
+%----------------------------------------------------------------------------------------
+%	OBJECTIVES
+%----------------------------------------------------------------------------------------
+\begin{frame}{Last time: Johnson-Lindenstrauss lemma}
+\begin{itemize}
+	\item Let $X \in \mathbb{R}^{m\times d}$ be a matrix of $m$ points in $\mathbb{R}^d.$
+	\pause
+\item Let $0 < \epsilon < 1/2, m > 4.$ Then, there exists a linear map $A: \mathbb{R}^d \to \mathbb{R}^n$ with $n = O(\epsilon^{-2} \log m)$ such that for all $x_i,x_j \in X,$ $i, j \in [m],$ $(1-\epsilon)\|x_i-x_j\|^2 \leq \|Ax_i - Ax_j\|^2 \leq (1+\epsilon)\|x_i-x_j\|^2.$
+	\pause
+	\item Informal: any set of points in high-dimensional space can be mapped to a lower-dimensional space while approximately preserving the distances between the points.
+\end{itemize}
+\end{frame}
+\begin{frame}{Proof}
+
+\begin{itemize}
+	\item Distortion by Gaussian random matrices: for any $x \in \mathbb{R}^d,$ when the entries $A_{ij}$ are iid standard Gaussian, 
+		\begin{align*}
+			\mathbb{P}(n(1 - \epsilon)\|x\|^2 &\leq \|Ax\|^2 \leq n(1+\epsilon)\|x\|^2)\\
+			&\geq 1 - 2\exp(-(\epsilon^2 - \epsilon^3) n/4).
+		\end{align*}
+	\pause
+\item Then, deterministic statement of J-L lemma follows from union bound over all $m^2$ pairs of points.
+\end{itemize}
+
+\end{frame}
+\begin{frame}{To show: distortion by Gaussian random matrices}
+\begin{itemize}
+	\item Let $A$ be a $n \times d$ matrix with iid standard Gaussian entries. Then, $E[(Ax)_j] = 0$ and ${\rm Var}((Ax)_j) = \|x\|^2,$ for all $j \leq n.$
+	\pause
+	\item Thus, $1/\|x\|^2 \|Ax\|^2$ is a $\chi^2$ random variable with $n$ degrees of freedom.
+	\pause
+	\item Chi-squared distribution: $\rho(x) = \frac{1}{2^{n/2}\Gamma(n/2)} x^{n/2 - 1} e^{-x/2}, x\geq 0.$
+	\pause
+	\item Models sum of squares of $n$ independent standard normal random variables.
+\end{itemize}
+\end{frame}
+\begin{frame}{Implications: random projections}
+	\begin{itemize}
+		\item Random projections surprisingly preserve Euclidean distances between points.
+		\pause 
+		\item Can be used for dimensionality reduction.
+		\pause
+		\item Can also be used for speeding up nearest neighbor search (e.g. within Laplacian eigenmaps).
+		\pause
+		
+			
+	\end{itemize}
+\end{frame}
+\begin{frame}{Compressed sensing revisited}
+	\begin{itemize}
+	\item Let $A \in \mathbb{R}^{n\times d}$ be a random matrix with iid standard Gaussian entries. This is an example of a matrix that satisfies the RIP (restricted isometry property).
+	\pause 
+	\item $s$-RIP: for all subsets $S \subset [d]$ with $|S| \leq s,$ there exists an $\epsilon_s > 0$ such that
+		\begin{align}
+		(1-\epsilon)\|x\|^2 \leq \|Ax\|^2 \leq (1+\epsilon)\|x\|^2.
+	\end{align}
+	\pause
+\item (Candes,Romberg, Tao 2005) If $x$ is $s$-sparse, then,
+	\begin{align}
+		x = {\rm argmin}_{z \in \mathbb{R}^d} \|z\|_1 \quad {\rm s.t.} \quad Ax = Az.
+	\end{align}
+	\end{itemize}
+\end{frame}
+\begin{frame}{Convolutional Neural Networks (source: cs231n.stanford.edu)}
+	\begin{itemize}
+		\item Suitable for image recognition. Won the 2012 ImageNet competition and subsequent ones.
+		\item Three types of layers: convolutional, FC, pooling
+		\item Convolutional layer: accepts a volume of size $W_1 \times H_1 \times D_1$ and outputs a volume of size $W_2 \times H_2 \times D_2$ where $W_2 = (W_1 - F + 2P)/S + 1$ and $H_2 = (H_1 - F + 2P)/S + 1$ and $D_2 = K$.
+
+		\item $K$ is number of filters, $F$ is filter size, $S$ is stride, $P$ is padding.
+		\item Pooling layer: downsamples along width and height, and optionally along depth.
+		\item FC layer: computes class scores, resulting in volume of size $1 \times 1 \times K$.
+
+	
+	\end{itemize}
+\end{frame}
+\begin{frame}{Clustering: unsupervised learning}
+\begin{itemize}
+	\item Given a set of points, $\{x_i\}_{i\in [m]}$, $x_i \in \mathbb{R}^d$, partition them into $k$ clusters.
+	\pause
+	\item Closely related to dimensionality reduction. 
+	\pause
+	\item Definition of clustering depends on the definition of distance between points. 
+	\pause
+	\item Center-based clustering: $k$ centers $\mu_1, \ldots, \mu_k \in \mathbb{R}^d.$
+
+\end{itemize}
+\end{frame}
+\begin{frame}{Lloyd's algorithm}
+	\begin{itemize}
+		\item Randomly choose $k$ centers $\mu_1, \ldots, \mu_k \in \mathbb{R}^d.$
+		\pause
+	\item Given centers $\mu_1, \ldots, \mu_k \in \mathbb{R}^d,$ assign each point $x_i$ to the closest center. That is, $$C_j = \{x_i: j \in {\rm arg min}_l \|x_i - \mu_{l}\|\}.$$
+		\pause
+	\item Given clusters $C_1, \ldots, C_k,$ update centers $\mu_1, \ldots, \mu_k \in \mathbb{R}^d$ as $$\mu_j = \frac{1}{|C_j|} \sum_{x_i \in C_j} x_i.$$
+		
+	\end{itemize}
+\end{frame}
+\begin{frame}{k-means algorithm (Lloyd's algorithm)}
+	\begin{itemize}
+		\item Lloyd's algorithm is an approximate method to solve the ERM problem: $$\min_{C_1, \ldots, C_k} \sum_{j=1}^k \sum_{x_i \in C_j} \|x_i - \mu(C_j)\|^2.$$
+		\pause
+		\item here, $\mu(C_j) = \frac{1}{|C_j|} \sum_{x_i \in C_j} x_i = {\rm argmin}_{\mu \in \mathbb{R}^d} \sum_{x_i \in C_j} \|x_i - \mu\|^2$ is the mean of the points in cluster $C_j.$
+		\pause
+		\item Lloyd's algorithm is a heuristic. It is not guaranteed to converge to the global optimum or even a local minimum.
+	\end{itemize}
+\end{frame}
+\begin{frame}{Lloyd's algorithm properties}
+	\begin{itemize}
+		\item Lloyd's algorithm decreases the ERM objective at each iteration.
+		\pause
+	\item Proof: Let $C_1^{(t)}, \ldots, C_k^{(t)}$ be the clusters at iteration $t.$  
+	\pause
+	\item $C_j^{(t)} = \{x_i: j \in {\rm arg min}_l \|x_i - \mu_{l}^{(t-1)}\|\}.$
+	\pause
+\item Since $\mu_j^{(t)} = \frac{1}{|C_j^{(t)}|} \sum_{x_i \in C_j^{(t)}} x_i = {\rm arg min}_{\mu \in \mathbb{R}^d} \sum_{x_i \in C_j^{(t)}} \|x_i - \mu\|^2,$
+		\begin{align*}
+		\sum_{x_i \in C_j^{(t)}} \|x_i - \mu_j^{(t)}\|^2 &\leq \sum_{x_i \in C_j^{(t)}} \|x_i - \mu_{j}^{(t-1)}\|^2, \quad \forall j \in [k].
+		\end{align*}
+	
+	\end{itemize}
+\end{frame}
+\begin{frame}{Lloyd's algorithm properties}
+	\begin{itemize}
+		\item Proof (contd.): by definition of $C_j^{(t)},$
+		\begin{align*}
+		\sum_{x_i \in C_j^{(t)}} \|x_i - \mu_j^{(t)}\|^2 &\leq \sum_{x_i \in C_j^{(t-1)}} \|x_i - \mu_{j}^{(t-1)}\|^2, \quad \forall j \in [k].
+		\end{align*}
+		\pause
+		\item Summing over $j \in [k],$ 
+		\begin{align*}
+		\sum_{j=1}^k \sum_{x_i \in C_j^{(t)}} \|x_i - \mu_j^{(t)}\|^2 &\leq \sum_{j=1}^k \sum_{x_i \in C_j^{(t-1)}} \|x_i - \mu_{j}^{(t-1)}\|^2.
+		\end{align*}
+		\pause
+		\item Thus, the ERM objective decreases at each iteration.
+	\end{itemize}
+\end{frame}
+\begin{frame}{Lloyd's algorithm properties}
+	\begin{itemize}
+		\item k-means algorithm is sensitive to initialization of the centers.
+		\pause
+		\item Complexity: $O(mdk)$ per iteration, where $m$ is the number of points, $d$ is the dimension, and $k$ is the number of clusters.	
+	\end{itemize}
+\end{frame}
+\begin{frame}{k-means failure modes}
+	\begin{figure}
+		\includegraphics[width=\textwidth]{kmeans-failure1.png}
+\end{figure}
+	Source: \href{https://scikit-learn.org/stable/auto_examples/cluster/plot_kmeans_assumptions.html\#sphx-glr-auto-examples-cluster-plot-kmeans-assumptions-py}{sklearn's toy examples}
+\end{frame}
+\begin{frame}{k-means failure modes contd}
+	\begin{figure}
+	\includegraphics[width=\textwidth]{kmeans-failure2.png}
+	\end{figure}
+
+	Source: \href{https://scikit-learn.org/stable/auto_examples/cluster/plot_kmeans_assumptions.html\#sphx-glr-auto-examples-cluster-plot-kmeans-assumptions-py}{sklearn's toy examples}
+\end{frame}
+\begin{frame}{Spectral clustering}
+	\begin{itemize}
+		\item Given distance $d$ or similarity matrix, $W \in \mathbb{R}^{m\times m},$ partition the points into $k$ clusters.
+		\pause
+		\item $W$ is symmetric and non-negative.
+		\pause
+		\item $W$ is a weighted adjacency matrix of a graph.
+		\pause
+		\item ERM problem: $\min_{C_1, \ldots, C_k} \sum_{j=1}^k \sum_{x_i \in C_j} \sum_{x_l \notin C_j} w_{il}.$ Graph min-cut problem.
+	\end{itemize}
+\end{frame}
+\begin{frame}{RatioCut problem: spectral clustering solution}
+	\begin{itemize}
+		\item RatioCut problem: $\min_{C_1, \ldots, C_k} \sum_{j=1}^k \frac{\sum_{x_i \in C_j} \sum_{x_l \notin C_j} w_{il}}{|C_j|}.$
+		\pause
+		\item Normalization by $|C_j|$ penalizes small clusters.
+		\pause
+
+	\end{itemize}
+
+\end{frame}
+\begin{frame}{RatioCut objective}
+	\begin{itemize}
+\item Lemma 22.3 (Ben-David and Shalev Shwartz) RatioCut objective = ${\rm Tr}(H^\top L H)$
+\pause
+	\item $L = D - W$ is the graph Laplacian, where $D$ is the diagonal matrix with $D_{ii} = \sum_{j=1}^m w_{ij}.$
+	\pause
+\item $H \in \mathbb{R}^{m\times k}$ is the indicator matrix of the clusters. $H_{ij} = 1i/\sqrt{|C_j|}$ if $x_i \in C_j$ and $0$ otherwise.
+	\pause
+	\item $h_i$ ($i$th column of $H$) is nonzero at row $j$ if $x_j$ is in cluster $i$. 
+	\pause
+	\item $H$ has orthonormal columns.
+	\end{itemize}
+\end{frame}
+\begin{frame}{Recall: graphical representation of $X$}
+	\begin{itemize}
+		\item Choose weighting, such as, $w_{ij} = \exp(-\|x_i - x_j\|^2/2\sigma^2).$ As $\sigma \to 0,$ $w_{ij} \to \mathbbm{1}_{i=j}.$ The $m \times m$ matrix $W$ is the adjacency matrix of a graph.
+		\pause
+		\item Let $D$ be the diagonal matrix with $D_{ii} = \sum_{j=1}^m w_{ij}.$
+		\pause 
+		\item Graph laplacian: $L = D - W.$
+		\pause 
+		\item Detects local structure / clusters in data.
+
+	\end{itemize}
+
+\end{frame}
+\begin{frame}{Lemma proof: RatioCut objective and graph laplacian connection}
+	\begin{itemize}
+		\item RatioCut objective$(C_1,\cdots, C_k)$
+			$$ := \sum_{j=1}^k \dfrac{\sum_{x_i \in C_j} \sum_{x_l \notin C_j} w_{il}}{|C_j|}.$$
+
+	\pause
+	\item Need to show equal to ${\rm Tr}(H^\top L H).$
+	\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Laplacian eigenmaps}
+	\begin{itemize}
+		\item Want to solve: $\min_{y_1,\cdots,y_m} \sum_{i=1}^m \sum_{j=1}^m w_{ij} \|y_i - y_j\|^2.$
+		\pause
+		\item optimal embeddings: $y_i = E(x_i) = U[i,-n:]$ where $U$ is the matrix of eigenvectors of $L$.
+		\pause
+		\item For any vector $v$, $v^\top L v = (1/2)\sum_{i, j=1}^m w_{ij} (v_i - v_j)^2.$
+		\pause
+		\item $L$ is positive semi-definite.
+	\end{itemize}
+\end{frame}
+\begin{frame}{Bottom $n$ eigenvectors}
+	\begin{itemize}
+		\item Rayleigh quotient optimality
+		\pause
+		\item Another interpretation: top $n$ eigenvectors of $L^\dagger.$ $L^\dagger_{ij}$ represents expected time for random walk $i \to j \to i.$ 
+		\pause
+		\item Kernel PCA with $K = L^\dagger$ is equivalent to Laplacian eigenmaps. 
+	\end{itemize}
+\end{frame}
+\begin{comment}
+\begin{frame}{Combining dimension reduction and k-means}
+	\begin{itemize}
+		\item Spectral clustering algorithm uses Laplacian eigenmaps on $m$-dimensional data.
+		\pause
+		\item Uses $v_i, i = 1,2,\cdots,m$ eigenvectors of $L$ corresponding to the $k$ smallest eigenvalues.
+		\pause
+		\item Perform k-means on 
+	\end{itemize}
+\end{frame}
+\end{comment}
+\end{document}
