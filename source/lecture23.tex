@@ -1,0 +1,290 @@
+\documentclass[final]{beamer}
+\usepackage{amsmath,amssymb,amsthm,amsfonts,graphicx}
+\usepackage{eulervm,verbatim}          
+\usepackage[scaled]{helvet}
+\usepackage[most]{tcolorbox}
+\setbeamercolor{frametitle}{fg=black,bg=white} % Colors of the block titles
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+\definecolor{darkcerulean}{rgb}{0.03, 0.27, 0.49}
+\newcommand{\citesmall}[1]{[{\color{darkcerulean}\begin{small} \textbf{#1} \end{small}}]}
+\setbeamertemplate{footline}[frame number]
+\DeclareMathOperator*{\argmin}{arg\,min}
+\usepackage{graphicx}  % Required for including images
+\usepackage{bbm}
+\usepackage{booktabs} % Top and bottom rules for tables
+\definecolor{burgundy}{rgb}{0.5, 0.0, 0.13}
+\newcommand{\highlight}[1]{{\color{burgundy} \textbf{#1}}}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=magenta,
+    pdftitle={CSE6740-Lecture 22},
+    pdfauthor={Nisha Chandramoorthy},
+    pdflang={en-US}
+}
+\usepackage{url}
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION 
+%----------------------------------------------------------------------------------------
+\title{\begin{huge}{Lecture 22: Spectral clustering, EM algorithm}\end{huge}} % Poster title
+
+
+\author{Nisha Chandramoorthy} % Author(s)
+
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\frame{\titlepage}
+
+%----------------------------------------------------------------------------------------
+%	OBJECTIVES
+%----------------------------------------------------------------------------------------
+\begin{frame}{Lloyd's algorithm}
+	\begin{itemize}
+		\item Randomly choose $k$ centers $\mu_1, \ldots, \mu_k \in \mathbb{R}^d.$
+		\pause
+	\item Given centers $\mu_1, \ldots, \mu_k \in \mathbb{R}^d,$ assign each point $x_i$ to the closest center. That is, $$C_j = \{x_i: j \in {\rm arg min}_l \|x_i - \mu_{l}\|\}.$$
+		\pause
+	\item Given clusters $C_1, \ldots, C_k,$ update centers $\mu_1, \ldots, \mu_k \in \mathbb{R}^d$ as $$\mu_j = \frac{1}{|C_j|} \sum_{x_i \in C_j} x_i.$$
+		
+	\end{itemize}
+\end{frame}
+\begin{frame}{k-means algorithm (Lloyd's algorithm)}
+	\begin{itemize}
+		\item Lloyd's algorithm is an approximate method to solve the ERM problem: $$\min_{C_1, \ldots, C_k} \sum_{j=1}^k \sum_{x_i \in C_j} \|x_i - \mu(C_j)\|^2.$$
+		\pause
+		\item here, $\mu(C_j) = \frac{1}{|C_j|} \sum_{x_i \in C_j} x_i = {\rm argmin}_{\mu \in \mathbb{R}^d} \sum_{x_i \in C_j} \|x_i - \mu\|^2$ is the mean of the points in cluster $C_j.$
+		\pause
+		\item Lloyd's algorithm is a heuristic. It is not guaranteed to converge to the global optimum or even a local minimum.
+	\end{itemize}
+\end{frame}
+\begin{frame}{Lloyd's algorithm properties}
+	\begin{itemize}
+		\item k-means algorithm is sensitive to initialization of the centers.
+		\pause
+		\item Complexity: $O(mdk)$ per iteration, where $m$ is the number of points, $d$ is the dimension, and $k$ is the number of clusters.	
+	\end{itemize}
+\end{frame}
+\begin{frame}{k-means failure modes}
+	\begin{figure}
+		\includegraphics[width=\textwidth]{kmeans-failure1.png}
+\end{figure}
+	Source: \href{https://scikit-learn.org/stable/auto_examples/cluster/plot_kmeans_assumptions.html\#sphx-glr-auto-examples-cluster-plot-kmeans-assumptions-py}{sklearn's toy examples}
+\end{frame}
+\begin{frame}{k-means failure modes contd}
+	\begin{figure}
+	\includegraphics[width=\textwidth]{kmeans-failure2.png}
+	\end{figure}
+
+	Source: \href{https://scikit-learn.org/stable/auto_examples/cluster/plot_kmeans_assumptions.html\#sphx-glr-auto-examples-cluster-plot-kmeans-assumptions-py}{sklearn's toy examples}
+\end{frame}
+\begin{frame}{Spectral clustering}
+	\begin{itemize}
+		\item Given distance $d$ or similarity matrix, $W \in \mathbb{R}^{m\times m},$ partition the points into $k$ clusters.
+		\pause
+		\item $W$ is symmetric and non-negative.
+		\pause
+		\item $W$ is a weighted adjacency matrix of a graph.
+		\pause
+		\item ERM problem: $\min_{C_1, \ldots, C_k} \sum_{j=1}^k \sum_{x_i \in C_j} \sum_{x_l \notin C_j} w_{il}.$ Graph min-cut problem.
+	\end{itemize}
+\end{frame}
+\begin{frame}{RatioCut problem: spectral clustering solution}
+	\begin{itemize}
+		\item RatioCut problem: $\min_{C_1, \ldots, C_k} \sum_{j=1}^k \frac{\sum_{x_i \in C_j} \sum_{x_l \notin C_j} w_{il}}{|C_j|}.$
+		\pause
+		\item Normalization by $|C_j|$ penalizes small clusters.
+		\pause
+
+	\end{itemize}
+
+\end{frame}
+\begin{frame}{RatioCut objective}
+	\begin{itemize}
+\item Lemma 22.3 (Ben-David and Shalev Shwartz) RatioCut objective = ${\rm Tr}(H^\top L H)$
+\pause
+	\item $L = D - W$ is the graph Laplacian, where $D$ is the diagonal matrix with $D_{ii} = \sum_{j=1}^m w_{ij}.$
+	\pause
+\item $H \in \mathbb{R}^{m\times k}$ is the indicator matrix of the clusters. $H_{ij} = 1i/\sqrt{|C_j|}$ if $x_i \in C_j$ and $0$ otherwise.
+	\pause
+	\item $h_i$ ($i$th column of $H$) is nonzero at row $j$ if $x_j$ is in cluster $i$. 
+	\pause
+	\item $H$ has orthonormal columns.
+	\end{itemize}
+\end{frame}
+\begin{frame}{Recall: graphical representation of $X$}
+	\begin{itemize}
+		\item Choose weighting, such as, $w_{ij} = \exp(-\|x_i - x_j\|^2/2\sigma^2).$ As $\sigma \to 0,$ $w_{ij} \to \mathbbm{1}_{i=j}.$ The $m \times m$ matrix $W$ is the adjacency matrix of a graph.
+		\pause
+		\item Let $D$ be the diagonal matrix with $D_{ii} = \sum_{j=1}^m w_{ij}.$
+		\pause 
+		\item Graph laplacian: $L = D - W.$
+		\pause 
+		\item Detects local structure / clusters in data.
+
+	\end{itemize}
+
+\end{frame}
+\begin{frame}{Lemma proof: RatioCut objective and graph laplacian connection}
+	\begin{itemize}
+		\item RatioCut objective$(C_1,\cdots, C_k)$
+			$$ := \sum_{j=1}^k \dfrac{\sum_{x_i \in C_j} \sum_{x_l \notin C_j} w_{il}}{|C_j|}.$$
+
+	\pause
+	\item Need to show equal to ${\rm Tr}(H^\top L H).$
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Laplacian eigenmaps}
+	\begin{itemize}
+		\item Want to solve: $\min_{y_1,\cdots,y_m} \sum_{i=1}^m \sum_{j=1}^m w_{ij} \|y_i - y_j\|^2.$
+		\pause
+		\item optimal embeddings: $y_i = E(x_i) = U[i,-n:]$ where $U$ is the matrix of eigenvectors of $L$.
+		\pause
+		\item For any vector $v$, $v^\top L v = (1/2)\sum_{i, j=1}^m w_{ij} (v_i - v_j)^2.$
+		\pause
+		\item $L$ is positive semi-definite.
+	\end{itemize}
+\end{frame}
+\begin{frame}{Bottom $n$ eigenvectors}
+	\begin{itemize}
+		\item Rayleigh quotient optimality
+		\pause
+		\item Another interpretation: top $n$ eigenvectors of $L^\dagger.$ $L^\dagger_{ij}$ represents expected time for random walk $i \to j \to i.$ 
+		\pause
+		\item Kernel PCA with $K = L^\dagger$ is equivalent to Laplacian eigenmaps. 
+	\end{itemize}
+\end{frame}
+\begin{frame}{Combining dimension reduction and k-means}
+	\begin{itemize}
+		\item Spectral clustering algorithm uses Laplacian eigenmaps on $m$-dimensional data.
+		\pause
+		\item Uses $v_i, i = 1,2,\cdots,k$ eigenvectors of $L$ corresponding to the $k$ smallest eigenvalues.
+		\pause
+		\item Perform k-means on rows of $v_i.$ to obtain clusters
+	\end{itemize}
+\end{frame}
+\begin{frame}{Gaussian mixtures}
+	\begin{itemize}
+		\item Suppose we want to cluster data that is generated from a mixture of Gaussians.
+		\pause
+		\item $x_i \sim \sum_{j=1}^k \pi_j \mathcal{N}(\mu_j, \Sigma_j).$
+		\pause
+	\item Frequentist view: there is a true (unknown) parameter $\theta = (\pi_1, \ldots, \pi_k, \mu_1, \ldots, \mu_k, \Sigma_1, \ldots, \Sigma_k)$ that generated the data.
+	\end{itemize}
+\end{frame}
+\begin{frame}
+	\begin{itemize}
+		\item Clustering objective: maximize log likelihood of the data.
+		\pause
+		\item $\ell(x, \theta) = \log p_\theta(x) = \log \sum_{j=1}^k \pi_j \mathcal{N}(\mu_j, \Sigma_j).$
+		\pause
+		\item $\hat{R}_S(\theta) = \sum_{i=1}^m \log \sum_{j=1}^k \pi_j \mathcal{N}(\mu_j, \Sigma_j).$
+		\pause
+	\item More generally, $\hat{R}_S(\theta) = \sum_{i=1}^m \log \sum_{j=1}^k q_\theta(z_j) p_\theta(x_i | z_j).$
+	\pause
+	\item The joint distribution $p_\theta(x, z) = q_\theta(z) p_\theta(x | z)$ is parametrized by $\theta.$
+	\pause
+	\item $Z$ is a latent variable, e.g., $Z$ is the cluster assignment of $X.$
+	\end{itemize}
+\end{frame}
+\begin{frame}{Maximizing log likelihood}
+	\begin{itemize}
+		\item Distribution $q$ of the latent variable is unknown. 
+		\pause
+		\item Thus, we want to solve:
+			\begin{align}
+				\max_\theta \max_q \sum_{i=1}^m \log \sum_{j=1}^k q_\theta(z_j) p_\theta(x_i | z_j).
+			\end{align}
+		\item Lemma: For fixed $\theta$, optimal $q_\theta \equiv p_\theta(X|Z)$ is the posterior distribution of $Z$ given $X$.
+	\end{itemize}
+\end{frame}
+\begin{frame}{Proof: derivation of ELBO}
+\begin{itemize}
+	\item Fix some $x$ and $\theta$.
+	\pause
+	\item $\ell(x,\theta) = \log p_\theta(x) = \log \sum_{j=1}^k p_\theta(x, z_j) = \log \sum_{j=1}^k q_\theta(z_j) \frac{p_\theta(x, z_j)}{q_\theta(z_j)}.$
+	\pause
+	\item Use Jensen's inequality: $E\log Z \leq \log E Z$ for any random variable $Z.$
+	\pause 
+\item Thus, $\ell(x, \theta) \geq \sum_{j=1}^k q_\theta(z_j) \log \frac{p_\theta(x, z_j)}{q_\theta(z_j)}.$ 
+\pause
+\item This holds for any probability distribution $q_\theta$. 
+\pause
+\item ELBO$(q, \theta) = \sum_{j=1}^k q(z_j) \log \frac{p_\theta(x, z_j)}{q(z_j)}.$
+\pause
+\item Thus, we have shown, $\ell(x, \theta) \geq$ ELBO$(q, \theta)$ for any $q$.
+\end{itemize}
+\end{frame}
+\begin{frame}
+	\begin{itemize}
+		\item ELBO$(q, \theta) = - D_{KL}(q(z) || p_\theta(z | x)) + \log p_\theta(x).$
+		\pause
+		\item When $q(z) = p_\theta(z | x),$ ELBO$(q, \theta) = \log p_\theta(x).$
+		\pause
+		\item ELBO$(p_\theta(Z|X), \theta) = \sum_{j=1}^k p_\theta(z_j|x) \log \frac{p_\theta(z_j|x)p_\theta(x)}{p_\theta(z_j|x)}.$
+		\pause
+	\item ELBO$(p_\theta(Z|X), \theta) = \sum_{j=1}^k p_\theta(z_j|x) \log p_\theta(x) = \log p_\theta(x).$
+	\end{itemize}
+\end{frame}
+\begin{frame}{Expectation Maximization (EM) algorithm}
+	\begin{itemize}
+		\item Iteratively maximize ELBO$(q, \theta)$ w.r.t. $q$ and $\theta.$
+		\pause
+		\item E step: Fix $\theta$ and maximize ELBO$(q, \theta)$ w.r.t. $q.$ That is, set $q = p_\theta(Z|X).$
+		\pause
+		\item M step: Fix $q$ and maximize ELBO$(q, \theta)$ w.r.t. $\theta.$
+
+	\end{itemize}
+\end{frame}
+\begin{frame}{EM algorithm}
+	\begin{itemize}
+		\item E step: $q_{t+1}(Z|X) = p_{\theta_t}(Z|X).$
+		\pause
+	\item M step: $\theta_{t+1} = {\rm argmax}_\theta$ ELBO$(q_{t+1}, \theta).$
+		\pause
+		\item Repeat until convergence.
+	\end{itemize}
+\end{frame}
+\begin{frame}{EM algorithm properties}
+	\begin{itemize}
+		\item EM algorithm decreases $\hat{R}_S(\theta) = \sum_{i=1}^m \ell(x_i, \theta)$ at each iteration.
+		\item $\ell(x, \theta_{t+1}) = {\rm ELBO}(q_{t+2}, \theta_{t+1}) \geq {\rm ELBO}(q_{t+1}, \theta_{t+1}) \geq {\rm ELBO}(q_{t+1}, \theta_t) = \ell(x, \theta_t).$
+
+	\end{itemize}
+\end{frame}
+\begin{frame}{Example: mixture of Gaussians}
+	\begin{itemize}
+		\item $x_i \sim \sum_{j=1}^k \pi_j \mathcal{N}(\mu_j, \Sigma_j).$ Take $\Sigma_i = I$ for simplicity.
+		\pause
+		\item That is, $\theta = (\pi_1, \ldots, \pi_k, \mu_1, \ldots, \mu_k).$
+		\pause
+		\item $p_\theta(x|z_j) = \mathcal{N}(\mu_j, \Sigma_j);$ $p_\theta(z_j) = \pi_j.$
+		\pause
+	\item E step: $q_{t+1}(z|x) = p_{\theta_t}(z|x) = \frac{p_{\theta_t}(x|z)p_{\theta_t}(z)}{p_{\theta_t}(x)}.$
+		\pause
+	\item M step: $\theta_{t+1} = {\rm argmax}_\theta \sum_{i=1}^m \sum_{j=1}^k q_{t+1}(z_j|x_i) \log \frac{p_\theta(x_i, z_j)}{q_{t+1}(z_j|x_i)}.$
+
+	\pause
+	\item $\mu_{j,t+1} = \sum_{i=1}^m q_{t+1}(z_j|x_i) x_i.$
+	\pause
+\item $\pi_{j, t+1} = \frac{1}{m} \sum_{i=1}^m q_{t+1}(z_j|x_i)/Z_{j, t+1}.$
+			
+	\end{itemize}
+\end{frame}
+\begin{frame}{VAE revisited}
+	\begin{itemize}
+		\item Hard to compute $q_t$ in general. VAE solves this problem differently.
+		\item $p_\theta(x|z) = \mathcal{N}(f_\theta(z), \sigma^2 I).$ (Decoder: $f_\theta$)
+		\item $q_\phi(z|x) = \mathcal{N}(\mu_\phi(x), \Sigma_\phi(x)).$ (Encoder: $\mu_\phi, \Sigma_\phi$)
+	\end{itemize}
+\end{frame}
+\end{document}
