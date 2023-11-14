@@ -21,7 +21,7 @@
     linkcolor=blue,
     filecolor=magenta,      
     urlcolor=magenta,
-    pdftitle={CSE6740-Lecture 22},
+    pdftitle={CSE6740-Lecture 23},
     pdfauthor={Nisha Chandramoorthy},
     pdflang={en-US}
 }
@@ -31,7 +31,7 @@
 %----------------------------------------------------------------------------------------
 %	TITLE SECTION 
 %----------------------------------------------------------------------------------------
-\title{\begin{huge}{Lecture 22: Spectral clustering, EM algorithm}\end{huge}} % Poster title
+\title{\begin{huge}{Lecture 23: Spectral clustering, EM algorithm}\end{huge}} % Poster title
 
 
 \author{Nisha Chandramoorthy} % Author(s)
@@ -112,7 +112,7 @@
 \pause
 	\item $L = D - W$ is the graph Laplacian, where $D$ is the diagonal matrix with $D_{ii} = \sum_{j=1}^m w_{ij}.$
 	\pause
-\item $H \in \mathbb{R}^{m\times k}$ is the indicator matrix of the clusters. $H_{ij} = 1i/\sqrt{|C_j|}$ if $x_i \in C_j$ and $0$ otherwise.
+\item $H \in \mathbb{R}^{m\times k}$ is the indicator matrix of the clusters. $H_{ij} = 1/\sqrt{|C_j|}$ if $x_i \in C_j$ and $0$ otherwise.
 	\pause
 	\item $h_i$ ($i$th column of $H$) is nonzero at row $j$ if $x_j$ is in cluster $i$. 
 	\pause
@@ -204,7 +204,7 @@
 			\begin{align}
 				\max_\theta \max_q \sum_{i=1}^m \log \sum_{j=1}^k q_\theta(z_j) p_\theta(x_i | z_j).
 			\end{align}
-		\item Lemma: For fixed $\theta$, optimal $q_\theta \equiv p_\theta(X|Z)$ is the posterior distribution of $Z$ given $X$.
+		\item Lemma: For fixed $\theta$, optimal $q_\theta \equiv p_\theta(\cdot|X)$ is the conditional distribution of $Z$ given $X$.
 	\end{itemize}
 \end{frame}
 \begin{frame}{Proof: derivation of ELBO}
@@ -223,68 +223,5 @@
 \pause
 \item Thus, we have shown, $\ell(x, \theta) \geq$ ELBO$(q, \theta)$ for any $q$.
 \end{itemize}
-\end{frame}
-\begin{frame}
-	\begin{itemize}
-		\item ELBO$(q, \theta) = - D_{KL}(q(z) || p_\theta(z | x)) + \log p_\theta(x).$
-		\pause
-		\item When $q(z) = p_\theta(z | x),$ ELBO$(q, \theta) = \log p_\theta(x).$
-		\pause
-		\item ELBO$(p_\theta(Z|X), \theta) = \sum_{j=1}^k p_\theta(z_j|x) \log \frac{p_\theta(z_j|x)p_\theta(x)}{p_\theta(z_j|x)}.$
-		\pause
-	\item ELBO$(p_\theta(Z|X), \theta) = \sum_{j=1}^k p_\theta(z_j|x) \log p_\theta(x) = \log p_\theta(x).$
-	\end{itemize}
-\end{frame}
-\begin{frame}{Expectation Maximization (EM) algorithm}
-	\begin{itemize}
-		\item Iteratively maximize ELBO$(q, \theta)$ w.r.t. $q$ and $\theta.$
-		\pause
-		\item E step: Fix $\theta$ and maximize ELBO$(q, \theta)$ w.r.t. $q.$ That is, set $q = p_\theta(Z|X).$
-		\pause
-		\item M step: Fix $q$ and maximize ELBO$(q, \theta)$ w.r.t. $\theta.$
-
-	\end{itemize}
-\end{frame}
-\begin{frame}{EM algorithm}
-	\begin{itemize}
-		\item E step: $q_{t+1}(Z|X) = p_{\theta_t}(Z|X).$
-		\pause
-	\item M step: $\theta_{t+1} = {\rm argmax}_\theta$ ELBO$(q_{t+1}, \theta).$
-		\pause
-		\item Repeat until convergence.
-	\end{itemize}
-\end{frame}
-\begin{frame}{EM algorithm properties}
-	\begin{itemize}
-		\item EM algorithm decreases $\hat{R}_S(\theta) = \sum_{i=1}^m \ell(x_i, \theta)$ at each iteration.
-		\item $\ell(x, \theta_{t+1}) = {\rm ELBO}(q_{t+2}, \theta_{t+1}) \geq {\rm ELBO}(q_{t+1}, \theta_{t+1}) \geq {\rm ELBO}(q_{t+1}, \theta_t) = \ell(x, \theta_t).$
-
-	\end{itemize}
-\end{frame}
-\begin{frame}{Example: mixture of Gaussians}
-	\begin{itemize}
-		\item $x_i \sim \sum_{j=1}^k \pi_j \mathcal{N}(\mu_j, \Sigma_j).$ Take $\Sigma_i = I$ for simplicity.
-		\pause
-		\item That is, $\theta = (\pi_1, \ldots, \pi_k, \mu_1, \ldots, \mu_k).$
-		\pause
-		\item $p_\theta(x|z_j) = \mathcal{N}(\mu_j, \Sigma_j);$ $p_\theta(z_j) = \pi_j.$
-		\pause
-	\item E step: $q_{t+1}(z|x) = p_{\theta_t}(z|x) = \frac{p_{\theta_t}(x|z)p_{\theta_t}(z)}{p_{\theta_t}(x)}.$
-		\pause
-	\item M step: $\theta_{t+1} = {\rm argmax}_\theta \sum_{i=1}^m \sum_{j=1}^k q_{t+1}(z_j|x_i) \log \frac{p_\theta(x_i, z_j)}{q_{t+1}(z_j|x_i)}.$
-
-	\pause
-	\item $\mu_{j,t+1} = \sum_{i=1}^m q_{t+1}(z_j|x_i) x_i.$
-	\pause
-\item $\pi_{j, t+1} = \frac{1}{m} \sum_{i=1}^m q_{t+1}(z_j|x_i)/Z_{j, t+1}.$
-			
-	\end{itemize}
-\end{frame}
-\begin{frame}{VAE revisited}
-	\begin{itemize}
-		\item Hard to compute $q_t$ in general. VAE solves this problem differently.
-		\item $p_\theta(x|z) = \mathcal{N}(f_\theta(z), \sigma^2 I).$ (Decoder: $f_\theta$)
-		\item $q_\phi(z|x) = \mathcal{N}(\mu_\phi(x), \Sigma_\phi(x)).$ (Encoder: $\mu_\phi, \Sigma_\phi$)
-	\end{itemize}
 \end{frame}
 \end{document}
