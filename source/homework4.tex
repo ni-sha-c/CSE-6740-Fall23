@@ -35,37 +35,26 @@
 %----------------------------------------------------------------------------------
 \section{Maximum Likelihood [15 pts]}
 
-Suppose we have $n$ i.i.d (independent and identically distributed)
-data samples from the following probability distribution. This
+Suppose we have $m$ i.i.d. samples from the following probability distribution. This
 problem asks you to build a log-likelihood function, and find the
 maximum likelihood estimator of the parameter(s).
 
-\subsubsection*{(a) Poisson distribution [5 pts]}
-The Poisson distribution is defined as
-\begin{equation} \nonumber
-P(x_i = k) = \frac{\lambda^k e^{-\lambda}}{k!} (k = 0, 1, 2, ...).
-\end{equation}
-What is the maximum likelihood estimator of $\lambda$?
-
-\subsubsection*{(b) Multinomial distribution [5 pts]}
+\subsection*{(a) Multinomial distribution [5 pts]}
 The probability density function of Multinomial distribution is given by 
 $$f(x_1,x_2,\dots,x_k;n,\theta_1,\theta_2,\dots,\theta_k)=\frac{n!}{x_1!x_2!\cdots x_k!}\prod_{j=1}^{k}\theta_j^{x_j},$$
 where $\sum_{j=1}^k\theta_j=1,\sum_{j=1}^k x_j=n$. What is the maximum likelihood estimator of $\theta_j, j=1,\dots k$?
 
-\iffalse
-\subsubsection*{(c) Gaussian normal distribution [5 pts]}
-Suppose we have $n$ i.i.d (Independent and Identically Distributed)
-data samples from a univariate Gaussian normal distribution
-$\mathcal{N}(\mu, \sigma^2)$, which is given by
+\subsection*{(b) Gaussian normal distribution [5 pts]}
+Suppose we have $m$ i.i.d. samples from a multivariate Gaussian normal distribution on $\mathbb{R}^d,$ 
+$\mathcal{N}(\mu, \Sigma)$, which is given by
 \begin{equation}
-\mathcal{N}(x; \mu, \sigma^2) = \frac{1}{\sigma \sqrt{2\pi}} \exp
-\left( - \frac{(x - \mu)^2}{2\sigma^2} \right).\nonumber
+	\mathcal{N}(x; \mu, \Sigma) = \frac{1}{|\Sigma|^{1/2} \sqrt{2\pi}^d} \exp
+	\left( - (x - \mu)^\top \Sigma^{-1} (x - \mu)\right).\nonumber
 \end{equation}
-What is the maximum likelihood estimator of $\mu$ and $\sigma^2$?
+What is the maximum likelihood estimator of $\mu$ and $\Sigma$? (4 points) Is the ML estimator of $\Sigma$ biased? (1 point)
 \vspace{1cm}
-\fi
 
-\subsubsection*{(b) Exponential distribution [5 pts]}
+\subsection*{(c) Exponential distribution [5 pts]}
 The probability density function of Exponential distribution is
 given by
 \begin{equation} \nonumber
@@ -86,8 +75,7 @@ where $r^{ij}=1$ if $\text x_i$ belongs to the $j$-th cluster and $r^{ij}=0$ oth
 \subsection*{ Part (a)}
 Prove that using the squared Euclidean distance $\|\text x_i-\mu^j\|^2$ as the dissimilarity function and minimizing the distortion function, we will have 
    $$\mu^j=\frac{\sum_i r^{ij} \text x_i}{\sum_i r^{ij}}.$$
-   That is, $\mu^j$ is the center of $j$-th cluster. [5 pts]}
-
+   That is, $\mu^j$ is the center of $j$-th cluster. [5 pts]
 
 \subsection*{ Part (b)}
 Suppose at each iteration, we need to find two clusters $\{\text x_1, \text x_2, \dots, \text x_p\}$ and $\{\text y_1, \text y_2, \dots, \text y_q\}$ with the minimum distance to merge. Some of the most commonly used distance metrics between two clusters are:
@@ -100,13 +88,15 @@ Suppose at each iteration, we need to find two clusters $\{\text x_1, \text x_2,
     $$\frac{1}{mp}\sum_{i=1}^p\sum_{j=1}^q\|\text x_i - \text y_j\|$$
     \end{itemize}
 
-Which of the three cluster distance metrics described above would most likely result in clusters most similar to those given by $k$-means? (Suppose $k$ is a power of 2 in this case). [5 pts]}
+Which of the three cluster distance metrics described above would most likely result in clusters most similar to those given by $k$-means? (Suppose $k$ is a power of 2 in this case). [5 pts]
 
 \subsection*{Part c}
-For the following data (two moons), which of these three distance metrics (if any) would successfully separate the two moons? [5 pts]}
-
+For the \emph{two moons} data (Figure \ref{fig:twomoons}), which of these three distance metrics (if any) would successfully separate the two moons? [5 pts]
+\begin{figure}[h]
 \includegraphics[trim = 0mm 90mm 0mm 90mm, clip, width = \linewidth]{clustering}
-
+\caption{Two moons data}
+	\label{fig:twomoons}
+\end{figure}
 \vspace{1cm}
 
 
